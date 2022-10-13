@@ -7,27 +7,6 @@ void setup() {
   pinMode(smsbutton,INPUT);
   Serial.begin(115200);
   Serial2.begin(115200);
-//  delay(10000);
-//  int inByte;
-//  if(Serial.available()){
-//    inByte = Serial.read();
-//    Serial.println("This is in Serial");
-//    Serial2.write(inByte);
-//  }
-//int inByte2;
-//  if(Serial2.available()){
-//    inByte2= Serial2.read();
-//    Serial.print("This is in Serial2");
-//    Serial.println(inByte);
-//  }
-//  char cstr[16];
-//  itoa(inByte,cstr,16);
-//  while (cstr != "OK")
-//  {    /* code */
-//  Serial.print(cstr);
-//  delay(1000);
-//  }
-  
 }
 
 void loop() {
@@ -35,15 +14,15 @@ void loop() {
   
   if(Serial.available()){
     int inByte = Serial.read();
-    Serial.println("This is in Serial");
+//    Serial.println("This is in Serial");
     Serial2.write(inByte);
     
   }
 
   if(Serial2.available()){
     int inByte = Serial2.read();
-    Serial.println("This is in Serial2");
-    Serial.println(inByte);
+//    Serial2.println("This is in Serial2");
+    Serial.write(inByte);
   }
 
   buttonState = digitalRead(smsbutton);
@@ -55,7 +34,7 @@ void loop() {
     }
   }
   lastButtonState = buttonState;
-  delay(1000);
+  delay(1000);  
 }
 
 void SendMessage(){
