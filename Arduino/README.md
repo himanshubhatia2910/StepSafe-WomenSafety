@@ -30,3 +30,7 @@ Send sms to the sim card in the board
 AT+CMGS="+91\<number>" <br>
 \>> \<Enter the message> 
 \<press ESC or Ctrl+Z to send>
+
+
+# TO DO
+- [ ] Read from AI Thinker
