@@ -45,6 +45,7 @@ AT+SLEEP=1
 - [x] Read from AI Thinker
 - [ ] Set baudrate of SI Thinker
 - [ ] check if there is I2C or SPI in the A9G board.
+- [ ] read documentation about other pins.
 
 
 message "Hello"
