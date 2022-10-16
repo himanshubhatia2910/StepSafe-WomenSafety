@@ -31,6 +31,24 @@ AT+CMGS="+91\<number>" <br>
 \>> \<Enter the message> 
 \<press ESC or Ctrl+Z to send>
 
+#### GPS feature
+AT+GPS=1
+AT+LOCATION=2 : To get the Latitude and Longitude
+AT+GPS=0 : TURN OFF GPS
+#### Lower power GPS
+AT+GPSLP=2
+
+#### Sleep Mode /[GPIO25 TO GND when putting to sleep, remove to put to sleep]
+AT+SLEEP=1
 
 # TO DO
-- [ ] Read from AI Thinker
+- [x] Read from AI Thinker
+- [ ] Set baudrate of SI Thinker
+
+
+message "Hello"
+```
++CIEV: "MESSAGE",1
++CMT: ,24
+0791191973553620040C9119392793016500002201618154802205C8329BFD06
+```
