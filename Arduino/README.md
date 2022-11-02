@@ -56,13 +56,14 @@ AT+SLEEP=1
 
 # TO DO
 
--   [ ] Send SMS on button press
+-   [ ] Shift to ESP32. As it may have more than 1 hardware serial ports
 -   [ ] Get GPS Co-Ordinates
--   [ ] Send SMS to multiple devices
+-   [ ] Send SMS on button press
+-   [ ] Send SMS to multiple devices [git](https://github.com/ahmadlogs/nodemcu/blob/main/sim800l-gps-reg-phone/sim800l-gps-reg-phone.ino)
 -   [ ] Receive call always
 -   [ ] Low Power mode
 -   [ ] SetUp - customize emergency contacts.
--   [ ] 
+-   [ ] Geo Fencing [YT](https://www.youtube.com/watch?v=mpeNx7yEh6w&list=PLZrkZsU6meXO1OAi0osYRJphg27jeUsc3&index=8)
 
 message "Hello"
 
