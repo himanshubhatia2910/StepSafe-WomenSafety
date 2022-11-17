@@ -9,8 +9,9 @@ Youtube [tutorial](https://www.youtube.com/watch?v=Yi5dgZBiq7g) refered
 
 # Steps to communicate to AI-Thinker A9
 
-1. Make connections as per pic ![connections](https://github.com/himanshubhatia2910/StepSafe-WomenSafety/blob/master/Arduino/images/connections/connections.jpg)
-[ESP32 pin Diagram](https://github.com/himanshubhatia2910/StepSafe-WomenSafety/blob/master/Arduino/images/connections/ESP32-Pinout.png)
+1. Make connections as per pic 
+<img src="https://github.com/himanshubhatia2910/StepSafe-WomenSafety/blob/master/Arduino/images/connections/connections.jpg" alt="connections" width="200"/>
+<img src="https://github.com/himanshubhatia2910/StepSafe-WomenSafety/blob/master/Arduino/images/connections/ESP32-Pinout.png" alt="esp32pindiagram" width="200"/>
 TX = 17 (TX2)
 RX = 16 (RX2)
 2. Set PORT
