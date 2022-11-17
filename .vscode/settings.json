@@ -1,4 +1,7 @@
 {
     "java.configuration.updateBuildConfiguration": "interactive",
-    "todo-tree.tree.showBadges": false
+    "todo-tree.tree.showBadges": false,
+    "files.associations": {
+        "random": "cpp"
+    }
 }

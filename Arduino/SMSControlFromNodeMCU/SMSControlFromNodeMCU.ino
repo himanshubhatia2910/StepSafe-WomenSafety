@@ -1,54 +1,139 @@
-#include <SoftwareSerial.h>
-// GPS Module RX pin to NodeMCU D3
-// GPS Module TX pin to NodeMCU D4
-#define rxPin D3
-#define txPin D4
-#define RESET_PIN D5
+// TxRx pins on ESP32
+// TX = 17
+// RX = 16
+#define RESET_PIN 21
+#define builtin_led 2
+#define TRIGGER_BUTTON 22
+#define RED_LED 5
+#define GREEN_LED 18
+#define BLUE_LED 19
 
-SoftwareSerial a9g(rxPin, txPin);
-// MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+// FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+// FLAGS
+bool GPSFixed = false;
+bool ATOK = false;
 
 String smsStatus, senderNumber, receivedDate, msg;
-// MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+
+void setup()
+{
+  Serial.begin(115200);
+  Serial.println("Arduino serial initialize");
+  Serial2.begin(115200);
+  Serial.println("A9G software serial initialize");
+  //---------------------------------------------------------
+  // smsStatus = "";
+  // senderNumber = "";
+  // receivedDate = "";
+  // msg = "";
+  //---------------------------------------------------------
+  pinMode(RESET_PIN, OUTPUT);
+  pinMode(builtin_led, OUTPUT);
+  pinMode(RED_LED, OUTPUT);
+  pinMode(BLUE_LED, OUTPUT);
+  pinMode(GREEN_LED, OUTPUT);
+  pinMode(TRIGGER_BUTTON,INPUT);
+  powerOn();
+  setupSMS();
+}
+
+// NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+void loop()
+{
+  keepcommunication();
+  statusLED();
+} // main loop ends
+
+// NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+
+void statusLED()
+{
+  // TODO Blue is ATOK is ON
+  // TODO Green is GSM Module is Fixed
+  if (GPSFixed)
+    digitalWrite(GREEN_LED, HIGH);
+  else
+    digitalWrite(GREEN_LED, LOW);
+  if (ATOK)
+    digitalWrite(BLUE_LED, HIGH);
+  else
+    digitalWrite(BLUE_LED, LOW);
+}
+
+/*@result 
+true : triggered, 
+false : not triggered*/
+bool checktriggered()
+{
+  int read = digitalRead(TRIGGER_BUTTON);
+  if (read == HIGH)
+  {
+    alertSMS();
+    return true;
+  }
+  return false;
+}
+
+void alertSMS()
+{
+  Serial.println("Inside AlertSMS function");
+  // TODO send alert message code
+}
 
 // check if the expected response is received
-boolean getResponse(String expected_answer, unsigned int timeout = 1000){
+boolean getResponse(String expected_answer, int timeout = 1000)
+{
   boolean flag = false;
   String response = "";
   unsigned long previous;
   //*************************************************************
-  for(previous=millis(); (millis() - previous) < timeout;){
-    while(a9g.available()){
-      response = a9g.readString();
-      if(response.indexOf(expected_answer) > 0){
+  for (previous = millis(); (millis() - previous) < timeout;)
+  {
+    while (Serial2.available())
+    {
+      response = Serial2.readString();
+      if (response.indexOf(expected_answer) > 0)
+      {
         flag = true;
         goto OUTSIDE;
       }
     }
   }
-  //*************************************************************
-  OUTSIDE:
-  if(response != ""){Serial.println(response);}
+//*************************************************************
+OUTSIDE:
+  if (response != "")
+  {
+    Serial.println(response);
+  }
   return flag;
 }
-void wait(int millisec){
-  unsigned long previous=millis();
-  while(millis()-previous<millisec);
+
+void wait(int millisec)
+{
+  unsigned long previous = millis();
+  while (millis() - previous < millisec);
 }
+
 // Check if the at command was successful
-boolean tryATcommand(String cmd, String expected_answer, int timeout, int total_tries, boolean shouldRESET = false){
-  TryAgain:
-  for(int i=1; i<=total_tries; i++){
-    a9g.println(cmd);
-    if(getResponse(expected_answer, timeout) == true){
-      digitalWrite(LED_BUILTIN, LOW);
+boolean tryATcommand(String cmd, String expected_answer, int timeout = 1000, int total_tries = 1, boolean shouldRESET = false)
+{
+TryAgain:
+  for (int i = 1; i <= total_tries; i++)
+  {
+    Serial2.println(cmd);
+    if (getResponse(expected_answer, timeout) == true)
+    {
+      Serial.print("Got expected response : ");
+      Serial.println(expected_answer);
       break;
     }
-    else {
+    else
+    {
       Serial.print(".");
-    }    
-    if(i == total_tries && shouldRESET){
-      Serial.println("Faild! Resetting the Module");
+    }
+    if (i == total_tries && shouldRESET)
+    {
+      Serial.println("Failed! Resetting the Module");
       digitalWrite(RESET_PIN, LOW);
       wait(100);
       digitalWrite(RESET_PIN, HIGH);
@@ -58,209 +143,82 @@ boolean tryATcommand(String cmd, String expected_answer, int timeout, int total_
   //*************************************************************
 }
 
-void powerOn(){
-  tryATcommand("AT","OK",1000,20,true);
+void powerOn()
+{
+  Serial.println("Initializing powerOn");
+  tryATcommand("AT", "OK", 1000, 20, true);
 }
 
-void replyfroma9g()
+void setupSMS()
 {
-  Serial.println(a9g.readString());
+  Serial.println("Initializing setupSMS");
+  tryATcommand("AT+CMGF=1", "OK", 1000, 20);          // change to text mode
+  tryATcommand("AT+CSMP=17,167,0,0", "OK", 1000, 20); // ???
+  tryATcommand("AT+GPS=1", "OK", 1000, 20);           // Initialize GPS
 }
 
-void setup()
+void keepcommunication()
 {
-  //---------------------------------------------------------
-  Serial.begin(115200);
-  Serial.println("Arduino serial initialize");
-  //---------------------------------------------------------
-  a9g.begin(115200);
-  Serial.println("A9G software serial initialize");
-  //---------------------------------------------------------
-  smsStatus = "";
-  senderNumber = "";
-  receivedDate = "";
-  msg = "";
-  //---------------------------------------------------------
-  // TODO check what this is
-  // a9g.println("ATE1"); // Modem command echo enable, it's not always required, but it's handy for debugging. Any typing on keyboard will be echoed back by the modem.
-  // wait(1000);
-  // a9g.println("AT+CMGF=1"); // SMS text mode
-  // wait(1000);
-  //---------------------------------------------------------
-  pinMode(RESET_PIN,OUTPUT);
-  pinMode(LED_BUILTIN,OUTPUT);
-  powerOn();
-}
-// NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
-
-// NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
-void loop()
-{
-  //---------------------------------------------------------
-  // while (a9g.available())
-  // {
-    // parseData(a9g.readString());
-
-  // }
-  //---------------------------------------------------------
+  // TODO how to check if board is working properly
+  // checktriggered();
   while (Serial.available())
   {
-    a9g.println(Serial.readString());
+    Serial2.println(Serial.readString());
   }
-  replyfroma9g();
-  //---------------------------------------------------------
-} // main loop ends
-// NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+  while (Serial2.available())
+  {
+    parseData(Serial2.readString());
+  }
+}
 
-// NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
-void parseData(String buff)
+void parseData(String replyfromA9G)
 {
-  Serial.println(buff);
+  Serial.print("[in parseData] Got reply from A9G: ");
+  Serial.println(replyfromA9G);
 
   unsigned int len, index;
   //---------------------------------------------------------
   // Remove sent "AT Command" from the response string.
-  index = buff.indexOf("\r");
-  buff.remove(0, index + 2);
-  buff.trim();
+  index = replyfromA9G.indexOf("\r");
+  replyfromA9G.remove(0, index + 2);
+  replyfromA9G.trim();
   //---------------------------------------------------------
 
-  //---------------------------------------------------------
-  if (buff != "OK")
+  if (replyfromA9G != "OK")
   {
-    index = buff.indexOf(":");
-    String cmd = buff.substring(0, index);
+    index = replyfromA9G.indexOf(":");
+    String cmd = replyfromA9G.substring(0, index);
     cmd.trim();
 
-    buff.remove(0, index + 2);
+    replyfromA9G.remove(0, index + 2);
     // MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
     if (cmd == "+CMTI")
     {
-      // get newly arrived memory location and store it in temp
-      index = buff.indexOf(",");
-      String temp = buff.substring(index + 1, buff.length());
-      temp = "AT+CMGR=" + temp + "\r";
-      // get the message stored at memory location "temp"
-      a9g.println(temp);
+      // get newly arrived SMS and store it in temp
+      index = replyfromA9G.indexOf(",");
+      String temp = replyfromA9G.substring(index + 1, replyfromA9G.length());
+      Serial.print("sms temp =");
+      Serial.println(temp);
     }
-    // MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
     else if (cmd == "+CMGR")
     {
-      extractSms(buff);
-
-      // if received sms have at command
-      if (msg.startsWith("at+") || msg.startsWith("at"))
-      {
-        sendResponseATcommand(msg);
-        smsStatus = "";
-        senderNumber = "";
-        receivedDate = "";
-        msg = "";
-      }
+      // TODO configure message parsing
+      // extractSms(replyfromA9G);
+      Serial.println(cmd);
     }
-    // MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+    else if (cmd == "+CME ERROR")
+      Serial.println("Error has occured");
+    Serial.println(cmd);
+    ATOK = false;
+    wait(1000);
+    ATOK = true;
   }
   //---------------------------------------------------------
   else
   {
     // The result of AT Command is "OK"
+    Serial.println("Data was not parsed.");
+    ATOK = true;
   }
   //---------------------------------------------------------
 }
-// NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
-
-// NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
-void sendResponseATcommand(String ATcommand)
-{
-  //---------------------------------------------------------
-  if (ATcommand.equals(""))
-  {
-    Serial.println("No AT Command is found.");
-    return;
-  }
-  //---------------------------------------------------------
-  uint8_t answer = 0;
-  unsigned int timeout = 3000;
-  String response;
-  unsigned long previous;
-  wait(100);
-  //---------------------------------------------------------
-  // Clean the input buffer
-  while (a9g.available() > 0)
-    a9g.read();
-  //---------------------------------------------------------
-  // Send the AT command
-  a9g.println(ATcommand);
-  //---------------------------------------------------------
-  previous = millis();
-  //---------------------------------------------------------
-  // this loop waits for the answer with time out
-  do
-  {
-    // if there are data in the UART input buffer, reads it.
-    // MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
-    if (a9g.available() != 0)
-    {
-      response = a9g.readString();
-
-      if (response != "")
-        answer == 1;
-    }
-    // MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
-  } while ((answer == 0) && ((millis() - previous) < timeout));
-  //---------------------------------------------------------
-  // Remove sent "AT Command" from the response string.
-  int index = response.indexOf("\r");
-  response.remove(0, index + 2);
-  response.trim();
-  Serial.println("---------------------");
-  Serial.println(response);
-  Serial.println("---------------------");
-  //---------------------------------------------------------
-  // Reply(response);
-  //---------------------------------------------------------
-}
-// NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
-
-// NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
-void extractSms(String buff)
-{
-  unsigned int index;
-  //---------------------------------------------------------
-  index = buff.indexOf(",");
-  smsStatus = buff.substring(1, index - 1);
-  buff.remove(0, index + 2);
-  //---------------------------------------------------------
-  senderNumber = buff.substring(0, 13);
-  buff.remove(0, 19);
-  //---------------------------------------------------------
-  receivedDate = buff.substring(0, 20);
-  buff.remove(0, buff.indexOf("\r"));
-  buff.trim();
-  //---------------------------------------------------------
-  index = buff.indexOf("\n\r");
-  buff = buff.substring(0, index);
-  buff.trim();
-  msg = buff;
-  buff = "";
-  msg.toLowerCase();
-  //---------------------------------------------------------
-}
-// NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
-
-// NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
-void Reply(String text)
-{
-  a9g.print("AT+CMGF=1\r");
-  wait(1000);
-  a9g.print("AT+CMGS=\"" + senderNumber + "\"\r");
-  wait(1000);
-  a9g.print(text);
-  wait(100);
-  // ascii code for ctrl-26
-   a9g.println((char)26); //ascii code for ctrl-26
-//  a9g.write(0x1A);
-  wait(1000);
-  Serial.println("SMS Sent Successfully.");
-}
-// NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN

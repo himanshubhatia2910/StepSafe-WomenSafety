@@ -10,8 +10,12 @@ Youtube [tutorial](https://www.youtube.com/watch?v=Yi5dgZBiq7g) refered
 # Steps to communicate to AI-Thinker A9
 
 1. Make connections as per pic ![connections](https://github.com/himanshubhatia2910/StepSafe-WomenSafety/blob/master/Arduino/images/connections/connections.jpg)
+[ESP32 pin Diagram](https://github.com/himanshubhatia2910/StepSafe-WomenSafety/blob/master/Arduino/images/connections/ESP32-Pinout.png)
+TX = 17 (TX2)
+RX = 16 (RX2)
 2. Set PORT
 3. Set communication as "Both NL & CR".
+
 
 ## AT Commands used:
 `AT+CSQ` : Get signal strength<br>
@@ -65,7 +69,7 @@ Format : `+CIEV: “MESSAGE”,1 SMS received, including phone number, time and 
 +CMT: ,23 0891683110602305F0240D91687186935218F500007101909061452303B3D90C To +CIEV: “MESSAGE”,1 
 +CMT: ,23 0891683110602305F0240D91687186935218F50000710190
 ```
-
+## List SMS
 `AT+CMGL=4` List all SMS → pud format, use this command with parameter 4 
 ```
 +CMGL: 1,1,,23 0891683110602305F0240D91687186935218F500007101909041252303B1580C
@@ -73,7 +77,7 @@ Format : `+CIEV: “MESSAGE”,1 SMS received, including phone number, time and 
 +CMGL: 3,1,,23 0891683110602305F0240D91687186935218F500007101909061452303B3D90C 
 +CMGL: 4,1,,23 0891683110602305F0240D91687186935218F500007101909071202303341A0D OK
 ```
-
+## Read SMS
 `AT+CMGF=1` Set to TXT format to read. <br>
 `AT+CMGL=“ALL”` List all short messages → txt format, use this command parameter as ALL <br>
 ```
@@ -98,6 +102,8 @@ OK
 ```
 +CMGR: “REC READ”,“+86xxxxxxxxxxx”,,“2017/10/09,09:16:54+08” 333
 ``` 
+
+## Delete Message
 `AT+CMGD=1` Delete the first SMS `OK`<br>
 `AT+CMGD=2` Delete the second message. <br>
 
@@ -170,7 +176,7 @@ Related instructions `AT+GPS=1`, turn on GPS <br>
 `AT+GPS?`, query GPS status <br>
 `AT+GPSRD=N`, N is a number, it means output a NEMA message from AT serial port in N seconds. <br>
 `AT+LOCATION=X` <br>
-X=1 is the address of the base station, X=2 is the address of the GPS <br>
+`X=1` is the address of the base station, `X=2` is the address of the GPS <br>
 To Note that after the GPS is turned on, the GPS_TXD of the module will output positioning information by default at a baud rate of 9600. This does not affect the baud rate of the entire module. 
 For example, the working baud rate of the A9G module is 115200, and the AT command is sent to turn on the GPS. At this time, GPS_TXD will output information at 9600 baud rate, and the AT serial port is still 115200. To In addition, please note that the positioning information will output GNGGA GNRMC instead of GPGGA and GPRMC. The module uses a hybrid positioning system, including GPS, BDS and GNNS (Global Navigation System). Explain the composition of the output information header, for example, GPGGA, split into GP+GGA→ positioning system + output data type, GP is the GPS positioning system, GGA is the output information of time, position, and number of satellites, similarly GNGGA is GN +GGA→Positioning system + output data type, GN is the global navigation system, GGA is the output information of time, position, and number of satellites, other instructions please follow this order. Finally, the module defaults to GPS+BDS mixed mode output, then the output information is the data at the beginning of GN, if it is set to single mode, it is the data output at the beginning of the mode, for example, if it is set to GPS mode, the output information is GPGGA.<br> 
 Example `AT+GPS=1` Enable GPS function `OK` <br>
@@ -244,10 +250,23 @@ Some one time configs:<br>
 # TO DO
 
 -   [x] Shift to ESP32. As it may have more than 1 hardware serial ports
--   [ ] Get GPS Co-Ordinates
--   [ ] Send SMS on button press
+-   [x] Get GPS Co-Ordinates
+-   [x] Send SMS on button press
 -   [ ] Send SMS to multiple devices [git](https://github.com/ahmadlogs/nodemcu/blob/main/sim800l-gps-reg-phone/sim800l-gps-reg-phone.ino)
 -   [ ] Receive call always
 -   [ ] Low Power mode
 -   [ ] SetUp - customize emergency contacts.
 -   [ ] Geo Fencing [YT](https://www.youtube.com/watch?v=mpeNx7yEh6w&list=PLZrkZsU6meXO1OAi0osYRJphg27jeUsc3&index=8)
+
+Repluy from at+location
+15:08:05.971 -> [in parseData] Got reply from A9G:
+15:08:05.971 -> AT+LOCATION=2
+15:08:05.971 -> 
+15:08:05.971 -> 18.469467,73.868813
+15:08:05.971 -> 
+15:08:05.971 -> OK
+15:08:05.971 -> 
+15:08:05.971 -> 
+15:08:05.971 -> 18.469467,73.868813
+15:08:05.971 -> 
+15:08:05.971 -> OK
