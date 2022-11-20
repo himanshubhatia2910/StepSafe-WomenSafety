@@ -297,13 +297,16 @@ Some one time configs:<br>
 `500` : CTRL + Z not send and unknown error<br>
 `58`  : Unknown command <br>
 `52`  : GPS not Fixed <br>
+
+`+CMGS: n`  : SMS has been sent.
+`+CIEV: "SMSFULL",2` : Inbox is full.
 # TO DO
 
 -   [x] Shift to ESP32. As it may have more than 1 hardware serial ports
 -   [x] Get GPS Co-Ordinates
 -   [x] Send SMS on button press
--   [ ] Send SMS to multiple devices [git](https://github.com/ahmadlogs/nodemcu/blob/main/sim800l-gps-reg-phone/sim800l-gps-reg-phone.ino)
--   [ ] Receive call always
+-   [x] Send SMS to multiple devices [git](https://github.com/ahmadlogs/nodemcu/blob/main/sim800l-gps-reg-phone/sim800l-gps-reg-phone.ino)
+-   [x] Receive call always
 -   [ ] Low Power mode
 -   [ ] SetUp - customize emergency contacts.
 -   [ ] Geo Fencing [YT](https://www.youtube.com/watch?v=mpeNx7yEh6w&list=PLZrkZsU6meXO1OAi0osYRJphg27jeUsc3&index=8)
