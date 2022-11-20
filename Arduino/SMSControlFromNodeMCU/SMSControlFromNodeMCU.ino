@@ -272,9 +272,7 @@ void parseData(String replyfromA9G)
     Serial.println("Error has occured");
     Serial.println(replyfromA9G);
   }
-  // TODO pickup call always
   else if (replyfromA9G.indexOf("RING")!=-1){
-
     Serial.println("RING caught");
     Serial2.println("ATA\r");
     noparseupdate();
