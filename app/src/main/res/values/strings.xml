@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">StepSafe-WomenSafety</string>
-</resources>
+    <string name="forgot_password"> <u>Forgot Password?</u></string>
+    <string name="sign_up"> <u>Sign Up</u>.</string>
+    </resources>
