@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F0F4F3"
+    tools:context=".Information">
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:background="#F0F4F3"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+        <LinearLayout
+            android:id="@+id/linear1"
+            android:background="#F0F4F3"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:gravity="center"
+            android:layout_height="match_parent" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/ic_group_13" />
+            <EditText
+                android:id="@+id/name"
+                android:layout_width="295dp"
+                android:layout_height="50dp"
+                android:background="@drawable/logincomp"
+                android:drawableStart="@drawable/ic_person"
+                android:drawablePadding="5dp"
+                android:fontFamily="@font/poppins"
+                android:hint="Name"
+                android:inputType="text"
+                android:layout_marginTop="30dp"
+                android:textColor="@color/black"
+                android:textColorHint="#A09D98"
+                android:textSize="14sp" />
+            <EditText
+                android:id="@+id/contact"
+                android:layout_width="295dp"
+                android:layout_height="50dp"
+                android:background="@drawable/logincomp"
+                android:drawableStart="@drawable/ic_phone"
+                android:drawablePadding="5dp"
+                android:fontFamily="@font/poppins"
+                android:hint="Contact Number"
+                android:inputType="phone"
+                android:layout_marginTop="15dp"
+                android:textColor="@color/black"
+                android:textColorHint="#A09D98"
+                android:textSize="14sp" />
+            <EditText
+                android:id="@+id/blood"
+                android:layout_width="295dp"
+                android:layout_height="50dp"
+                android:background="@drawable/logincomp"
+                android:drawableStart="@drawable/ic_injection"
+                android:drawablePadding="5dp"
+                android:fontFamily="@font/poppins"
+                android:hint="Blood Group"
+                android:inputType="text"
+                android:layout_marginTop="15dp"
+                android:textColor="@color/black"
+                android:textColorHint="#A09D98"
+                android:textSize="14sp" />
+            <EditText
+                android:id="@+id/age"
+                android:layout_width="295dp"
+                android:layout_height="50dp"
+                android:background="@drawable/logincomp"
+                android:drawableStart="@drawable/ic_calendar"
+                android:drawablePadding="5dp"
+                android:fontFamily="@font/poppins"
+                android:hint="Age"
+                android:inputType="number"
+                android:layout_marginTop="15dp"
+                android:textColor="@color/black"
+                android:textColorHint="#A09D98"
+                android:textSize="14sp" />
+            <EditText
+                android:id="@+id/dob"
+                android:layout_width="295dp"
+                android:layout_height="50dp"
+                android:background="@drawable/logincomp"
+                android:drawableStart="@drawable/ic_cake"
+                android:drawablePadding="5dp"
+                android:fontFamily="@font/poppins"
+                android:hint="Date Of Birth"
+                android:inputType="date"
+                android:layout_marginTop="15dp"
+                android:textColor="@color/black"
+                android:textColorHint="#A09D98"
+                android:textSize="14sp" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:orientation="horizontal"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/weight"
+                    android:layout_width="145dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/logincomp"
+                    android:drawableStart="@drawable/ic_weight"
+                    android:drawablePadding="5dp"
+                    android:fontFamily="@font/poppins"
+                    android:hint="Weight"
+                    android:inputType="number"
+                    android:layout_marginTop="15dp"
+                    android:textColor="@color/black"
+                    android:textColorHint="#A09D98"
+                    android:textSize="14sp" />
+                <EditText
+                    android:id="@+id/height"
+                    android:layout_width="145dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/logincomp"
+                    android:drawableStart="@drawable/ic_height"
+                    android:drawablePadding="5dp"
+                    android:fontFamily="@font/poppins"
+                    android:hint="Height"
+                    android:layout_marginLeft="5dp"
+                    android:inputType="number"
+                    android:layout_marginTop="15dp"
+                    android:textColor="@color/black"
+                    android:textColorHint="#A09D98"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+            <EditText
+                android:id="@+id/emergency"
+                android:layout_width="295dp"
+                android:layout_height="50dp"
+                android:background="@drawable/logincomp"
+                android:drawableStart="@drawable/ic_person2"
+                android:drawablePadding="5dp"
+                android:fontFamily="@font/poppins"
+                android:hint="Emergency Contact"
+                android:inputType="phone"
+                android:layout_marginTop="15dp"
+                android:textColor="@color/black"
+                android:textColorHint="#A09D98"
+                android:textSize="14sp" />
+            <TextView
+                android:layout_width="295dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/login_button"
+                android:fontFamily="@font/poppins_semibold"
+                android:gravity="center"
+                android:paddingTop="14dp"
+                android:paddingBottom="14dp"
+                android:text="Save"
+                android:textColor="#ffffff"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
