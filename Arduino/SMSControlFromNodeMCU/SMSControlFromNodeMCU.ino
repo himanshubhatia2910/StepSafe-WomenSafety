@@ -117,19 +117,25 @@ void alertSMS(String msg)
 {
   // TODO Make thsi work
   Serial.println("Inside AlertSMS function");
-  // TODO send alert message code
-  Serial2.println("AT+CMGF=1\r"); // Configuring TEXT mode
-  updateSerial();
-  Serial2.println("AT+CSMP=17,167,0,0\r");
-  updateSerial();
-  Serial2.println("AT+CMGS=\"+919372391056\"\r"); // change ZZ with country code and xxxxxxxxxxx with phone number to sms
-  updateSerial();
-  Serial2.println("Last Minute Engineers | lastminuteengineers.com"); // text content
-  updateSerial();
-  Serial2.println((char)26);
-  updateSerial();
-  Serial.println("Message sent");
-  updateSerial();
+  int startIndex = 0;
+  int endIndex = senderNumber.indexOf(",", startIndex);
+  while (endIndex != -1)
+  {
+    String number = senderNumber.substring(startIndex, endIndex);
+    Serial2.println("AT+CMGS=\""+number+"\"\r");
+    // Serial2.printf("AT+CMGS=\"%s\"\r\n", number);  
+    updateSerial();
+    Serial2.println(msg);
+    updateSerial();
+    Serial2.println((char)26);
+    // updateSerial();
+    if (getResponse("+CMGS:",5000))
+      Serial.println("Message sent to " + number);
+    else
+      Serial.println("Error occured while sending message to "+number);
+    startIndex = endIndex + 1;
+    endIndex = senderNumber.indexOf(",", startIndex);
+  }
 }
 
 // check if the expected response is received
@@ -155,8 +161,17 @@ void wait(int millisec)
 
 void powerOn()
 {
+  // TODO redefine for failure resting board
+  // Resetting the A9G
+  digitalWrite(RESET_PIN, LOW);
+  wait(100);
   digitalWrite(RESET_PIN, HIGH);
   Serial.println("Initializing powerOn");
+  while (!getResponse("READY"))
+  {
+    Serial.print(".");
+  }
+  Serial.println("Got READY from A9G");
   tryATcommand("AT\r", "OK", 1000, 20, true);
 }
 
@@ -170,11 +185,11 @@ void setupA9G()
 
 void keepcommunication()
 {
-  // TODO how to check if board is working properly 
-  alertSMS(msg);
+  // TODO how to check if board is working properly
   wait(15000);
 }
 
+// TODO make so that every reply from A9G is parsed.
 void parseData(String replyfromA9G)
 {
   Serial.println("[in parseData] Got reply from A9G: ");
