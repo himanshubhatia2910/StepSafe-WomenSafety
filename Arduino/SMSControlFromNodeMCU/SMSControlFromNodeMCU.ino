@@ -10,10 +10,12 @@
 
 // FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
 // FLAGS
-bool GPSFixed = false;
-bool ATOK = false;
+// bool GPSFixed = false;
+// bool ATOK = false;
+// bool gpscall = false;
 
-String smsStatus, senderNumber, receivedDate, msg;
+String msg, latitude, longitude;
+String senderNumber = "+919372391056,+917499599400,";
 
 void setup()
 {
@@ -21,66 +23,40 @@ void setup()
   Serial.println("Arduino serial initialize");
   Serial2.begin(115200);
   Serial.println("A9G software serial initialize");
-  //---------------------------------------------------------
-  // smsStatus = "";
-  // senderNumber = "";
-  // receivedDate = "";
-  // msg = "";
-  //---------------------------------------------------------
+  // ---------------------------------------------------
   pinMode(RESET_PIN, OUTPUT);
   pinMode(builtin_led, OUTPUT);
   pinMode(RED_LED, OUTPUT);
   pinMode(BLUE_LED, OUTPUT);
   pinMode(GREEN_LED, OUTPUT);
-  pinMode(TRIGGER_BUTTON,INPUT);
+  pinMode(TRIGGER_BUTTON, INPUT);
   powerOn();
-  setupSMS();
+  setupA9G();
 }
 
 // NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
 void loop()
 {
   keepcommunication();
-  statusLED();
-} // main loop ends
+  // statusLED();
+}
 
 // NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
 
-void statusLED()
-{
-  // TODO Blue is ATOK is ON
-  // TODO Green is GSM Module is Fixed
-  if (GPSFixed)
-    digitalWrite(GREEN_LED, HIGH);
-  else
-    digitalWrite(GREEN_LED, LOW);
-  if (ATOK)
-    digitalWrite(BLUE_LED, HIGH);
-  else
-    digitalWrite(BLUE_LED, LOW);
-}
-
-/*@result 
-true : triggered, 
+/*@result
+true : triggered,
 false : not triggered*/
 bool checktriggered()
 {
   int read = digitalRead(TRIGGER_BUTTON);
   if (read == HIGH)
   {
-    alertSMS();
+    // alertSMS();
     return true;
   }
   return false;
 }
 
-void alertSMS()
-{
-  Serial.println("Inside AlertSMS function");
-  // TODO send alert message code
-}
-
-// check if the expected response is received
 boolean getResponse(String expected_answer, int timeout = 1000)
 {
   boolean flag = false;
@@ -106,12 +82,6 @@ OUTSIDE:
     Serial.println(response);
   }
   return flag;
-}
-
-void wait(int millisec)
-{
-  unsigned long previous = millis();
-  while (millis() - previous < millisec);
 }
 
 // Check if the at command was successful
@@ -143,13 +113,54 @@ TryAgain:
   //*************************************************************
 }
 
-void powerOn()
+void alertSMS(String msg)
 {
-  Serial.println("Initializing powerOn");
-  tryATcommand("AT", "OK", 1000, 20, true);
+  // TODO Make thsi work
+  Serial.println("Inside AlertSMS function");
+  // TODO send alert message code
+  Serial2.println("AT+CMGF=1\r"); // Configuring TEXT mode
+  updateSerial();
+  Serial2.println("AT+CSMP=17,167,0,0\r");
+  updateSerial();
+  Serial2.println("AT+CMGS=\"+919372391056\"\r"); // change ZZ with country code and xxxxxxxxxxx with phone number to sms
+  updateSerial();
+  Serial2.println("Last Minute Engineers | lastminuteengineers.com"); // text content
+  updateSerial();
+  Serial2.println((char)26);
+  updateSerial();
+  Serial.println("Message sent");
+  updateSerial();
 }
 
-void setupSMS()
+// check if the expected response is received
+void updateSerial()
+{
+  while (Serial.available())
+  {
+    Serial2.write(Serial.read()); // Forward what Serial received to Software Serial Port
+  }
+  while (Serial2.available())
+  {
+    Serial.write(Serial2.read()); // Forward what Software Serial received to Serial Port
+  }
+  wait(2000);
+}
+
+void wait(int millisec)
+{
+  unsigned long previous = millis();
+  while (millis() - previous < millisec)
+    ;
+}
+
+void powerOn()
+{
+  digitalWrite(RESET_PIN, HIGH);
+  Serial.println("Initializing powerOn");
+  tryATcommand("AT\r", "OK", 1000, 20, true);
+}
+
+void setupA9G()
 {
   Serial.println("Initializing setupSMS");
   tryATcommand("AT+CMGF=1", "OK", 1000, 20);          // change to text mode
@@ -159,22 +170,16 @@ void setupSMS()
 
 void keepcommunication()
 {
-  // TODO how to check if board is working properly
-  // checktriggered();
-  while (Serial.available())
-  {
-    Serial2.println(Serial.readString());
-  }
-  while (Serial2.available())
-  {
-    parseData(Serial2.readString());
-  }
+  // TODO how to check if board is working properly 
+  alertSMS(msg);
+  wait(15000);
 }
 
 void parseData(String replyfromA9G)
 {
-  Serial.print("[in parseData] Got reply from A9G: ");
+  Serial.println("[in parseData] Got reply from A9G: ");
   Serial.println(replyfromA9G);
+  Serial.println("Print complete");
 
   unsigned int len, index;
   //---------------------------------------------------------
@@ -186,39 +191,60 @@ void parseData(String replyfromA9G)
 
   if (replyfromA9G != "OK")
   {
+    // reply of location coordinates doesnot include ":"
     index = replyfromA9G.indexOf(":");
-    String cmd = replyfromA9G.substring(0, index);
-    cmd.trim();
-
-    replyfromA9G.remove(0, index + 2);
-    // MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
-    if (cmd == "+CMTI")
+    if (index == -1)
     {
-      // get newly arrived SMS and store it in temp
+      Serial.println("Checking if gps coordinates");
       index = replyfromA9G.indexOf(",");
-      String temp = replyfromA9G.substring(index + 1, replyfromA9G.length());
-      Serial.print("sms temp =");
-      Serial.println(temp);
+      latitude = replyfromA9G.substring(0, index);
+      longitude = replyfromA9G.substring(index + 1, replyfromA9G.length());
+      msg = "StepSafe Shoe has been triggered\nThe last known coordinates tracked by the shoe are:\n";
+      msg = msg + "Latitude: " + latitude;
+      msg = msg + "\nLongitude: " + longitude;
+      msg += "\nhttps://www.google.com/maps/search/?api=1&query=";
+      msg += latitude;
+      msg += ",";
+      msg += longitude;
+      // variable msg contains the message to be sent.
+      Serial.println("Sending SMS to contact number");
+      alertSMS(msg);
     }
-    else if (cmd == "+CMGR")
-    {
-      // TODO configure message parsing
-      // extractSms(replyfromA9G);
-      Serial.println(cmd);
-    }
-    else if (cmd == "+CME ERROR")
-      Serial.println("Error has occured");
-    Serial.println(cmd);
-    ATOK = false;
-    wait(1000);
-    ATOK = true;
+
+    // String cmd = replyfromA9G.substring(0, index);
+    // cmd.trim();
+    // replyfromA9G.remove(0, index + 1);
+    // if (cmd == "+CMT")
+    // {
+    //   // get newly arrived SMS and store it in temp
+    //   index = replyfromA9G.indexOf(",");
+    //   String temp = replyfromA9G.substring(index + 1, replyfromA9G.length());
+    //   Serial.print("sms temp =");
+    //   Serial.println(temp);
+    //   // TODO get configuration setting from here
+    // }
+    // else if (cmd == "+CMGR")
+    // {
+    //   // TODO configure message parsing
+    //   // extractSms(replyfromA9G);
+    //   Serial.println("+CMGR");
+    //   Serial.println(cmd);
+    // }
+    // else if (cmd == "+CME ERROR")
+    // {
+    //   Serial.println("Error has occured");
+    //   Serial.println(cmd);
+    //   // ATOK = false;
+    //   // wait(1000);
+    //   // ATOK = true;
+    // }
   }
   //---------------------------------------------------------
   else
   {
     // The result of AT Command is "OK"
     Serial.println("Data was not parsed.");
-    ATOK = true;
+    // ATOK = true;
   }
   //---------------------------------------------------------
 }

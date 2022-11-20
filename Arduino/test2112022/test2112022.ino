@@ -1,68 +1,103 @@
 /* ------------------------------------------------------------------------
  * Created by: Tauseef Ahmad
  * Created on: 12 May, 2022
- *  
+ *
  * Tutorial: https://youtu.be/B_5nn7URZTk
  * ------------------------------------------------------------------------*/
 
-#include<SoftwareSerial.h>
-#define RESET_PIN D5
+// #include<SoftwareSerial.h>
+#define RESET_PIN 21
 unsigned long previousMillis = 0;
-SoftwareSerial sim800l(D3,D4);
+// SoftwareSerial Serial2(D3,D4);
 void SendMessage()
 {
   Serial.println("Setting the GSM in text mode");
   // Serial2.println("AT+CMGF=1\r");
-  sim800l.println("AT+CMGF=1\r");
- 
+  Serial2.println("AT+CMGF=1\r");
+
+  while (Serial.available())
+  {
+    Serial2.write(Serial.read()); // Forward what Serial received to Software Serial Port
+  }
+  while (Serial2.available())
+  {
+    Serial.write(Serial2.read()); // Forward what Software Serial received to Serial Port
+  }
   delay(2000);
+  
   Serial.println("Sending SMS to the desired phone number!");
   // Serial2.println("AT+CSMP=17,167,0,0\r");
-  sim800l.println("AT+CSMP=17,167,0,0\r");
+  Serial2.println("AT+CSMP=17,167,0,0\r");
 
-  delay(2000);
-  Serial.println("Sending SMS to the desired phone number!");
+  
+  while (Serial.available())
+  {
+    Serial2.write(Serial.read()); // Forward what Serial received to Software Serial Port
+  }
+  while (Serial2.available())
+  {
+    Serial.write(Serial2.read()); // Forward what Software Serial received to Serial Port
+  }
   // Serial2.println("AT+CMGS=\"+919372391056\"\r");
-  sim800l.println("AT+CMGS=\"+919372391056\"\r");
+  delay(2000);
+  Serial2.println("AT+CMGS=\"+919372391056\"\r");
 
+  
+  while (Serial.available())
+  {
+    Serial2.write(Serial.read()); // Forward what Serial received to Software Serial Port
+  }
+  while (Serial2.available())
+  {
+    Serial.write(Serial2.read()); // Forward what Software Serial received to Serial Port
+  }
   delay(2000);
   // Serial2.println("Hello from A9G");
-  sim800l.println("Hello from serial");
+  Serial2.println("Hello from serial");
+  
+  while (Serial.available())
+  {
+    Serial2.write(Serial.read()); // Forward what Serial received to Software Serial Port
+  }
+  while (Serial2.available())
+  {
+    Serial.write(Serial2.read()); // Forward what Software Serial received to Serial Port
+  }
   delay(2000);
-
   // Serial2.println((char)26);
-  sim800l.println((char)26);
-//  Serial.flush();
+  Serial2.println((char)26);
+  while (Serial.available())
+  {
+    Serial2.write(Serial.read()); // Forward what Serial received to Software Serial Port
+  }
+  while (Serial2.available())
+  {
+    Serial.write(Serial2.read()); // Forward what Software Serial received to Serial Port
+  }
+  Serial.println("Message sent");
   // delay(10000);
 }
 
-
-
-void setup() {
+void setup()
+{
   pinMode(RESET_PIN, OUTPUT);
-  pinMode(LED_BUILTIN, OUTPUT);
-  sim800l.begin(9600);
+  // pinMode(LED_BUILTIN, OUTPUT);
+  Serial2.begin(115200);
 
   Serial.begin(115200);
 
-
-  delay(20000);
+  delay(2000);
   SendMessage();
 }
 
-void loop() {
-
-//  while(sim800l.available()){
-//    String response = sim800l.readString();
-//    response.trim();
-//    Serial.println(response);
-//  }
-  while(Serial.available()){
-    sim800l.println(Serial.readString());
+void loop()
+{
+  while (Serial2.available())
+  {
+    Serial.println(Serial2.readString());
   }
-//  if(millis() - previousMillis > 10000) { //15 Minutes interval
-//    sim800l.println("AT");
-//    previousMillis = millis();
-//  }
-
+  while (Serial.available())
+  {
+    Serial2.println(Serial1.readString());
+  }
 }
