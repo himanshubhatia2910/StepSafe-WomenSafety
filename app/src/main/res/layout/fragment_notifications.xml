@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="#F0F4F3"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/msg1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="35dp"
+        android:fontFamily="@font/poppins_bold"
+        android:gravity="center_horizontal"
+        android:text="Emergency Contacts"
+        android:textAlignment="center"
+        android:textColor="#6C63FF"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/msg2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/msg1"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/poppins_semibold"
+        android:gravity="center_horizontal"
+        android:text="Add Contacts for Tracking Location"
+        android:textAlignment="center"
+        android:textColor="#6C63FF"
+        android:textSize="14dp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/name"
+        android:layout_width="295dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/msg2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="45dp"
+        android:background="@drawable/logincomp"
+        android:drawableStart="@drawable/ic_group_3"
+        android:drawablePadding="5dp"
+        android:fontFamily="@font/poppins_semibold"
+        android:hint="Name"
+        android:textColor="@color/black"
+        android:textColorHint="#A09D98"
+        android:textSize="14sp" />
+
+    <EditText
+        android:id="@+id/contact"
+        android:layout_width="295dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/name"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/logincomp"
+        android:drawableStart="@drawable/ic_group_2"
+        android:hint="Contact Number"
+        android:drawablePadding="5dp"
+        android:textColor="@color/black"
+        android:fontFamily="@font/poppins_semibold"
+        android:inputType="number"
+        android:textSize="14sp"
+        android:textColorHint="#A09D98"/>
+
+    <Button
+        android:layout_width="295dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/contact"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/login_button"
+        android:text="Save" />
+</RelativeLayout>
