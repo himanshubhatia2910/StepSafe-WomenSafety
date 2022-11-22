@@ -5,6 +5,7 @@
     android:layout_height="match_parent">
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
+
     <TextView
         android:id="@+id/num"
         android:layout_width="match_parent"
@@ -14,8 +15,7 @@
         android:textAlignment="center"
         android:textColor="#6C63FF"
         android:fontFamily="@font/poppins_bold"
-        android:gravity="center_horizontal"
-        />
+        android:gravity="center_horizontal" />
 
 
     <TextView
@@ -23,13 +23,13 @@
         android:layout_width="312dp"
         android:layout_height="75dp"
         android:layout_below="@id/num"
+        android:layout_marginStart="25dp"
         android:layout_marginTop="25dp"
+        android:layout_marginEnd="25dp"
         android:layout_marginBottom="50dp"
         android:background="@drawable/helpline"
         android:drawableStart="@drawable/ic_group_5"
         android:fontFamily="@font/poppins_bold"
-        android:layout_marginStart="25dp"
-        android:layout_marginEnd="25dp"
         android:paddingLeft="10dp"
         android:textColor="#6C63FF" />
 
