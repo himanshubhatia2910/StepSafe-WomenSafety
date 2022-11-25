@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,28 +28,28 @@ public class CreateAccount extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_account);
         ShowHidePass = findViewById(R.id.show_pass_btn);
+        super.onCreate(savedInstanceState);
+
+
+        setContentView(R.layout.activity_create_account);
+
         etRegEmail = findViewById(R.id.etRegEmail);
         etRegPassword = findViewById(R.id.etRegPass);
-        tvLoginHere = findViewById(R.id.SignIn);
+        tvLoginHere = findViewById(R.id.SignIn);//not necesary
         btnRegister = findViewById(R.id.btnRegister);
-        ShowHidePass.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        ShowHidePass.setOnClickListener(view -> {
 
-                if(view.getId()==R.id.show_pass_btn){
-                    if(etRegPassword.getTransformationMethod().equals(PasswordTransformationMethod.getInstance())){
-                        ((ImageView)(view)).setImageResource(R.drawable.eyeshow);
-                        //Show Password
-                        etRegPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-                    }
-                    else{
-                        ((ImageView)(view)).setImageResource(R.drawable.eyehide);
-                        //Hide Password
-                        etRegPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
-                    }
+            if(view.getId()==R.id.show_pass_btn){
+                if(etRegPassword.getTransformationMethod().equals(PasswordTransformationMethod.getInstance())){
+                    ((ImageView)(view)).setImageResource(R.drawable.eyeshow);
+                    //Show Password
+                    etRegPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                }
+                else{
+                    ((ImageView)(view)).setImageResource(R.drawable.eyehide);
+                    //Hide Password
+                    etRegPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
                 }
             }
         });
