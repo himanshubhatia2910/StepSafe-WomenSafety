@@ -31,7 +31,7 @@
             <!-- INPUT -->
 
             <EditText
-                android:id="@+id/email"
+                android:id="@+id/etRegEmail"
                 android:layout_width="295dp"
                 android:layout_height="50dp"
                 android:layout_centerHorizontal="true"
@@ -60,7 +60,7 @@
                 android:layout_height="wrap_content">
 
                 <EditText
-                    android:id="@+id/password"
+                    android:id="@+id/etRegPass"
                     android:layout_width="295dp"
                     android:layout_height="50dp"
                     android:layout_centerHorizontal="true"
@@ -92,7 +92,7 @@
         </RelativeLayout>
 
         <TextView
-            android:id="@+id/signUp"
+            android:id="@+id/btnRegister"
             android:layout_width="295dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
