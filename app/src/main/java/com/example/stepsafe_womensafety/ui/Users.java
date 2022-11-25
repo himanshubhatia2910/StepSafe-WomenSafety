@@ -1,14 +1,15 @@
 package com.example.stepsafe_womensafety.ui;
 
 public class Users {
-    String email,name,blood_group,dob;
+    String email,name,blood_group,dob,password;
     int phone_number,age,height,weight,emergency_contact;
 
     public Users() {
     }
 
-    public Users(String email, String name, String blood_group, String dob, int phone_number, int age, int height, int weight, int emergency_contact) {
+    public Users(String email,String password, String name, String blood_group, String dob, int phone_number, int age, int height, int weight, int emergency_contact) {
         this.email = email;
+        this.password=password;
         this.name = name;
         this.blood_group = blood_group;
         this.dob = dob;
@@ -21,6 +22,9 @@ public class Users {
 
     public String getEmail() {
         return email;
+    }
+    public String getPassword() {
+        return password;
     }
 
     public String getName() {
