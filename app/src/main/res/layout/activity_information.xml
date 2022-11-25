@@ -23,8 +23,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:src="@drawable/ic_group_13" />
+            <EditText
+                android:id="@+id/email"
+                android:layout_width="295dp"
+                android:layout_height="50dp"
+                android:background="@drawable/logincomp"
+                android:drawableStart="@drawable/ic_group_11"
+                android:drawablePadding="5dp"
+                android:fontFamily="@font/poppins"
+                android:hint="Email ID"
+                android:inputType="text"
+                android:layout_marginTop="15dp"
+                android:textColor="@color/black"
+                android:textColorHint="#A09D98"
+                android:textSize="14sp" />
             <EditText
                 android:id="@+id/name"
                 android:layout_width="295dp"
@@ -35,7 +49,7 @@
                 android:fontFamily="@font/poppins"
                 android:hint="Name"
                 android:inputType="text"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="15dp"
                 android:textColor="@color/black"
                 android:textColorHint="#A09D98"
                 android:textSize="14sp" />
