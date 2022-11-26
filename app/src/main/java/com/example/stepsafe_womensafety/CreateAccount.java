@@ -82,34 +82,38 @@ public class CreateAccount extends AppCompatActivity {
             etRegPassword.requestFocus();
         }else{
             mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    if (task.isSuccessful()) {
-                        FirebaseUser firebaseUser = mAuth.getCurrentUser();
-                        assert firebaseUser != null;
-                        String userid = firebaseUser.getUid();
-                        reference = FirebaseDatabase.getInstance().getReference("Users").child(userid);
-                        HashMap<String, String> hashMap = new HashMap<>();
-                        hashMap.put("id", userid);
-                        hashMap.put("email",email);
-                        hashMap.put("password",password);
-                        reference.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()){
-                                    Intent intent = new Intent(CreateAccount.this, Information.class);
-                                    Toast.makeText(CreateAccount.this, "User registered successfully", Toast.LENGTH_SHORT).show();
-                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    startActivity(intent);
-                                    finish();
-                                }
-                            }
-                        });
-                    }
-
+//                @Override
+//                public void onComplete(@NonNull Task<AuthResult> task) {
+//                    if (task.isSuccessful()) {
+//                        FirebaseUser firebaseUser = mAuth.getCurrentUser();
+//                        assert firebaseUser != null;
+//                        String userid = firebaseUser.getUid();
+//                        reference = FirebaseDatabase.getInstance().getReference("Users").child(userid);
+//                        HashMap<String, String> hashMap = new HashMap<>();
+//                        hashMap.put("id", userid);
+//                        hashMap.put("email",email);
+//                        hashMap.put("password",password);
+//
+//                        reference.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+//                            @Override
+//                            public void onComplete(@NonNull Task<Void> task) {
+//                                if (task.isSuccessful()){
+//                                    Intent intent = new Intent(CreateAccount.this, Login.class);
+//                                    Toast.makeText(CreateAccount.this, "User registered successfully", Toast.LENGTH_SHORT).show();
+//                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+//                                    startActivity(intent);
+//                                    finish();
+//                                }
+//                            }
+//                        });
+//                    }
+                    public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()){
                         Toast.makeText(CreateAccount.this, "User registered successfully", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(CreateAccount.this, Information.class));
+                        Intent i= new Intent(CreateAccount.this, Information.class);
+                        i.putExtra("email",email);
+                        i.putExtra("password",password);
+                       startActivity(i);
                     }else{
                         Toast.makeText(CreateAccount.this, "Registration Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     }

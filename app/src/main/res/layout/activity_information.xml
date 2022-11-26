@@ -123,7 +123,7 @@
                     android:fontFamily="@font/poppins"
                     android:hint="Height"
                     android:layout_marginLeft="5dp"
-                    android:inputType="number"
+                    android:inputType="text"
                     android:layout_marginTop="15dp"
                     android:textColor="@color/black"
                     android:textColorHint="#A09D98"
@@ -145,6 +145,7 @@
                 android:textColorHint="#A09D98"
                 android:textSize="14sp" />
             <TextView
+                android:id="@+id/save"
                 android:layout_width="295dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
