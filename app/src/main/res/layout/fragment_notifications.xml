@@ -66,6 +66,7 @@
         android:textColorHint="#A09D98"/>
 
     <Button
+        android:id="@+id/save"
         android:layout_width="295dp"
         android:layout_height="50dp"
         android:layout_below="@id/contact"

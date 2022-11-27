@@ -1,7 +1,7 @@
 package com.example.stepsafe_womensafety.ui;
 
 public class Users {
-    String email,name,blood_group,dob,password;
+    String email,name,blood_group,dob,password,imageUrl;
     int phone_number,age,height,weight,emergency_contact;
 
     public Users() {
@@ -37,6 +37,9 @@ public class Users {
 
     public String getDob() {
         return dob;
+    }
+    public String getImageUrl() {
+        return imageUrl;
     }
 
     public int getPhone_number() {
