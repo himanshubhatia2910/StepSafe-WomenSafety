@@ -30,7 +30,7 @@ public class Login extends AppCompatActivity {
     EditText etLoginPassword;
     TextView tvRegisterHere;
     TextView btnLogin;
-
+    TextView forgot_password;
     FirebaseAuth mAuth;
 
     @Override
@@ -45,6 +45,7 @@ public class Login extends AppCompatActivity {
         etLoginPassword = findViewById(R.id.password);
         tvRegisterHere = findViewById(R.id.signUp);
         btnLogin = findViewById(R.id.login);
+        forgot_password = findViewById(R.id.forgot);
         ShowHidePass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -70,10 +71,23 @@ public class Login extends AppCompatActivity {
 
             }
         });
-
-
         mAuth = FirebaseAuth.getInstance();
-
+        forgot_password.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String email = etLoginEmail.getText().toString().trim();
+                if (TextUtils.isEmpty(email)) {
+                    Toast.makeText(getApplication(), "Enter your registered email id", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                mAuth.sendPasswordResetEmail(email)
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(Login.this, "Password recovery mail sent on registered Email", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+            }
+        });
         btnLogin.setOnClickListener(view -> {
             loginUser();
         });

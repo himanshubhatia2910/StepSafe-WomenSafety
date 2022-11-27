@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -42,10 +43,10 @@ public class Information extends AppCompatActivity {
     FirebaseAuth mAuth;
     DatabaseReference reference;
     ImageView IVPreviewImage;
-    int SELECT_PICTURE = 200;
+    private final int  SELECT_PICTURE = 22;
     StorageReference storageReference;
     ProgressDialog progressDialog;
-    Uri selectedImageUri;
+    private Uri selectedImageUri;
     FirebaseStorage storage;
     ActivityMainBinding binding;
     @Override
@@ -82,13 +83,19 @@ public class Information extends AppCompatActivity {
             String user_dob = dob.getText().toString();
             String user_weight = weight.getText().toString();
             String user_height = height.getText().toString();
-            String emergency_contact = emergency.getText().toString();;
+            String emergency_contact = emergency.getText().toString();
             String email = getIntent().getStringExtra("email");
-            String password = getIntent().getStringExtra("password");
+            //String password = getIntent().getStringExtra("password");
 //            FirebaseUser firebaseUser = mAuth.getCurrentUser();
 //            assert firebaseUser != null;
 //            String userid = firebaseUser.getUid();
 //            reference = FirebaseDatabase.getInstance().getReference("Users").child(userid);
+            if(TextUtils.isEmpty(username) || TextUtils.isEmpty(phone) ||TextUtils.isEmpty(blood_group) ||TextUtils.isEmpty(user_age) ||
+                    TextUtils.isEmpty(user_dob) ||TextUtils.isEmpty(user_weight) ||TextUtils.isEmpty(user_height) ||
+                    TextUtils.isEmpty(emergency_contact)){
+                Toast.makeText(Information.this, "Please Enter all the Fields", Toast.LENGTH_SHORT).show();
+            }
+            else{
             mAuth = FirebaseAuth.getInstance();
             FirebaseUser firebaseUser = mAuth.getCurrentUser();
             assert firebaseUser != null;
@@ -97,7 +104,7 @@ public class Information extends AppCompatActivity {
             HashMap<String, String> hashMap = new HashMap<>();
             hashMap.put("id", userid);
             hashMap.put("email",email);
-            hashMap.put("password",password);
+            //hashMap.put("password",password);
             hashMap.put("name", username);
             hashMap.put("phone_number", phone);
             hashMap.put("blood_group", blood_group);
@@ -117,7 +124,7 @@ public class Information extends AppCompatActivity {
                         finish();
                     }
                 }
-            });
+            });}
         });
     }
     private void imageChooser() {
@@ -131,17 +138,27 @@ public class Information extends AppCompatActivity {
     }
     // this function is triggered when user
     // selects the image from the imageChooser
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
+
 
             // compare the resultCode with the
             // SELECT_PICTURE constant
-            if (requestCode == SELECT_PICTURE) {
+        if (requestCode == SELECT_PICTURE
+                && resultCode == RESULT_OK
+                && data != null
+                && data.getData() != null){
                 // Get the url of the image from data
                 selectedImageUri = data.getData();
                 try {
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImageUri);
+                    // Setting image on image view using Bitmap
+                    Bitmap bitmap = MediaStore
+                            .Images
+                            .Media
+                            .getBitmap(
+                                    getContentResolver(),
+                                    selectedImageUri);
                     IVPreviewImage.setImageBitmap(bitmap);
                     uploadImage();
                 }
@@ -155,20 +172,21 @@ public class Information extends AppCompatActivity {
 
             }
         }
-    }
+
 
     private void uploadImage() {
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setTitle("Uploading File....");
-        progressDialog.show();
+        if (selectedImageUri != null) {
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setTitle("Uploading File....");
+            progressDialog.show();
 
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss", Locale.CANADA);
-        Date now = new Date();
-        String fileName = formatter.format(now);
-        StorageReference ref = storageReference.child("images/");
+//            SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss", Locale.CANADA);
+//            Date now = new Date();
+//            String fileName = formatter.format(now);
+            StorageReference ref = storageReference.child("images/" + UUID.randomUUID() + toString());
 
 
-        ref.putFile(selectedImageUri)
+            ref.putFile(selectedImageUri)
 //                .addOnSuccessListener(taskSnapshot -> {
 //
 //
@@ -180,23 +198,19 @@ public class Information extends AppCompatActivity {
 //                        progressDialog.dismiss();
 //
 //                })
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    .addOnSuccessListener(taskSnapshot -> {
                         //IVPreviewImage.setImageURI(selectedImageUri);
                         progressDialog.dismiss();
                         Toast.makeText(Information.this, "Uploaded", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnFailureListener(e -> {
+                    })
+                    .addOnFailureListener(e -> {
 
 
-                    if (progressDialog.isShowing())
-                        progressDialog.dismiss();
-                    Toast.makeText(Information.this,"Failed to Upload",Toast.LENGTH_SHORT).show();
+                        if (progressDialog.isShowing())
+                            progressDialog.dismiss();
+                        Toast.makeText(Information.this, "Failed to Upload", Toast.LENGTH_SHORT).show();
 
 
-                });
-
+                    });
+        }}
     }
-}
