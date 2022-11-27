@@ -17,6 +17,7 @@ public class Home extends AppCompatActivity {
 
     private ActivityHomeBinding binding;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

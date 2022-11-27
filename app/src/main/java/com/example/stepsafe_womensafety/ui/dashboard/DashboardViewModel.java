@@ -1,5 +1,7 @@
 package com.example.stepsafe_womensafety.ui.dashboard;
 
+import android.widget.TextView;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
