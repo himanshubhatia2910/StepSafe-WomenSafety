@@ -14,8 +14,18 @@ bool GPSFixed = false;
 bool ATOK = false;
 bool gpscall = false;
 
-String msg, latitude = "NO-CORDS", longitude = "NO-CORDS";
+String msg, latitude = "0", longitude = "0", currenttime;
 String senderNumber = "+919372391056,+917499599400,";
+unsigned long dataMillis = 0;
+
+// ------------------------------------------------------------
+#include <Firebase_ESP_Client.h>
+#include <addons/TokenHelper.h>
+#include "secrets.h"
+FirebaseData fbdo;
+FirebaseAuth auth;
+FirebaseConfig config;
+// ------------------------------------------------------------
 
 void setup()
 {
@@ -33,6 +43,8 @@ void setup()
   // ---------------------------------------------------
   powerOn();
   setupA9G();
+  firebaseSetup();
+  
 }
 
 // NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
@@ -64,7 +76,7 @@ void getGPS()
 {
   gpscall = true;
   Serial2.println("AT+LOCATION=2\r");
-  // updateSerial();
+  updateSerial();
 }
 
 boolean getResponse(String expected_answer, int timeout = 1000)
@@ -158,14 +170,14 @@ void alertSMS(String msg)
 // check if the expected response is received
 void updateSerial()
 {
-  while (Serial.available())
-  {
-    Serial2.write(Serial.read()); // Forward what Serial received to Software Serial Port
-  }
+  // TO CARRY FORWARD THE COMMANDS FROM SERIAL
+  // while (Serial.available())
+  // {
+  //   Serial2.write(Serial.read()); // Forward what Serial received to Software Serial Port
+  // }
   while (Serial2.available())
   {
     parseData(Serial2.readString());
-    // Serial.write(Serial2.read()); // Forward what Software Serial received to Serial Port
   }
   wait(2000);
 }
@@ -243,14 +255,21 @@ void parseData(String replyfromA9G)
   else if (gpscall)
   {
     Serial.println("Checking if gps coordinates");
-    // if (replyfromA9G.indexOf("GPS NOT FIX NOW") != -1)
-    // {
-    //   // Serial.println("GPS not fixed caught");
-    //   Serial.println(replyfromA9G);
-    //   gpscall = false;
-    //   return;
-    // }
-    replyfromA9G = "18.4740194,73.8767881";
+    if (replyfromA9G.indexOf("GPS NOT FIX NOW") != -1)
+    {
+      Serial.println("GPS not fixed caught");
+      noparseupdate();
+      Serial.println(replyfromA9G);
+//      gpscall = false;
+//      return;
+    }
+    msg = latitude + "," + longitude;
+    if (msg.equals(replyfromA9G))
+    {
+      Serial.println("Co-Ordinates didnot change!");
+//      gpscall = false;
+//      return;
+    }
     index = replyfromA9G.indexOf(",");
     Serial.println("Found");
     GPSFixed = true;
@@ -265,6 +284,8 @@ void parseData(String replyfromA9G)
     msg += longitude;
     // variable msg contains the message to be sent.
     alertSMS(msg);
+    getTime();
+    firebaseSend();
     gpscall = false;
   }
   else if (replyfromA9G.indexOf("+CME ERROR:") != -1)
@@ -272,7 +293,8 @@ void parseData(String replyfromA9G)
     Serial.println("Error has occured");
     Serial.println(replyfromA9G);
   }
-  else if (replyfromA9G.indexOf("RING")!=-1){
+  else if (replyfromA9G.indexOf("RING") != -1)
+  {
     Serial.println("RING caught");
     Serial2.println("ATA\r");
     noparseupdate();
@@ -285,3 +307,81 @@ void parseData(String replyfromA9G)
   }
 }
 //---------------------------------------------------------
+void getTime()
+{
+//  TODO check this
+//  Serial2.println("AT+CCLK?");
+//  while (Serial2.available())
+//  {
+//    currenttime = Serial2.readString();
+//    for (int i = 0; i < 2; i++)
+//    {
+//      currenttime.replace('/', '-');
+//    }
+//  }
+//  noparseupdate();
+}
+
+void fcsUploadCallback(CFS_UploadStatusInfo info)
+{
+  if (info.status == fb_esp_cfs_upload_status_init)
+  {
+    Serial.printf("\nUploading data (%d)...\n", info.size);
+  }
+  else if (info.status == fb_esp_cfs_upload_status_upload)
+  {
+    Serial.printf("Uploaded %d%s\n", (int)info.progress, "%");
+  }
+  else if (info.status == fb_esp_cfs_upload_status_complete)
+  {
+    Serial.println("Upload completed ");
+  }
+  else if (info.status == fb_esp_cfs_upload_status_process_response)
+  {
+    Serial.print("Processing the response... ");
+  }
+  else if (info.status == fb_esp_cfs_upload_status_error)
+  {
+    Serial.printf("Upload failed, %s\n", info.errorMsg.c_str());
+  }
+}
+
+void firebaseSetup()
+{
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+//  while (WiFi.status() != WL_CONNECTED)
+//  {
+//    Serial.print(".");
+//    wait(300);
+//  }
+  config.api_key = API_KEY;
+  auth.user.email = USER_EMAIL;
+  auth.user.password = USER_PASSWORD;
+  config.token_status_callback = tokenStatusCallback; // see addons/TokenHelper.h
+  fbdo.setResponseSize(2048);
+  Firebase.begin(&config, &auth);
+  Firebase.reconnectWiFi(true);
+}
+
+void firebaseSend()
+{
+  while (Firebase.ready())
+  {
+    if (millis() - dataMillis > 30000 || dataMillis == 0&&gpscall)
+    {
+      dataMillis = millis();
+      FirebaseJson content;
+      String documentPath = "Location/History/up8ERAvfOlWkxNXp4vZ53fdL6eF2/" + (String)currenttime;
+      String doc_path = "projects/";
+      doc_path += FIREBASE_PROJECT_ID;
+      doc_path += "/databases/(default)/documents/coll_id/doc_id"; // coll_id and doc_id are your collection id and document id
+      content.set("fields/myLatLng/geoPointValue/latitude", latitude.toDouble());
+      content.set("fields/myLatLng/geoPointValue/longitude", longitude.toDouble());
+      if (Firebase.Firestore.createDocument(&fbdo, FIREBASE_PROJECT_ID, "", documentPath.c_str(), content.raw())){
+        Serial.println("Updated in Firebase!");
+        break;}
+      else
+        Serial.println(fbdo.errorReason() + "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+    }
+  }
+}
