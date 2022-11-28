@@ -34,7 +34,7 @@
             <!-- INPUT -->
 
             <EditText
-                android:id="@+id/name"
+                android:id="@+id/email_editText"
                 android:layout_width="295dp"
                 android:layout_height="50dp"
                 android:layout_centerHorizontal="true"
@@ -95,6 +95,7 @@
         </RelativeLayout>
 
         <TextView
+            android:id="@+id/forgot"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
@@ -106,6 +107,7 @@
             android:textSize="14sp" />
 
         <TextView
+            android:id="@+id/login"
             android:layout_width="295dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
