@@ -208,6 +208,79 @@ AT+CCLK?
 The time is zero time zone time, at 2:50:55 on October 7, 2017.
 +08 is the time zone, we are here in Dongba District, so the local time is 10:50:55 `OK`
 
+## ====== HTTP REQUEST ======
+
+`AT+HTTPGET=<url>` Uniform resource identifier, which can be a domain name or IP address <br>
+`AT+HTTPPOST=<url>,<content_type>,<body_content> <content_type>` : network file type and web page encoding content type `<body_content>:` body text <br>
+Example 
+`AT+CGATT=1` Attach to the network, if you need to go online, this command is required
+
+```
++CGATT:1 OK
+```
+
+`AT+CGDCONT=1,“IP”,“CMNET”` Set PDP parameters
+
+```
+OK
+```
+
+`AT+CGACT=1,1` Activate PDP, you can go online after it is activated correctly <br>
+
+```
+OK
+```
+
+`AT+HTTPGET=“http://www.google.com”` Connect to the website and request website resources
+
+```
+OK
+```
+
+The next message received is the response from the server
+
+## ===== MQTT =====
+
+Example: `AT+CGATT=1` Attach to the network
+
+```
+OK
+```
+
+`AT+CGDCONT=1,"IP","CMNET"` //Set PDP parameters
+
+```
+OK
+```
+
+`AT+CGACT=1,1` //Activate the PDP, you can go online after the correct activation
+
+```
+OK
+```
+
+`AT+MQTTCONN="www.anthinkerwx.com",1883,"12345",120,0,"Ai-thinker","123456"` //The client waits and connects to the server, and sends CONNECT at the same time
+
+```
+OK
+```
+
+// Note: (MQTT server needs to be built by yourself)
+`AT+MQTTPUB="test","124563",0,0,0` //The client transmits an application message to the server
+
+```
++MQTTPUBLISH: 1, test, 6, 124563
+OK
+```
+
+`AT+MQTTSUB="test",1,0` //The client sends a SUB message to the server to create a subscription
+
+```
+OK
+```
+
+`AT+MQTTDISCONN` //The DISCONNECT control message sent by the client to the server indicates that the client is normally disconnected
+
 ## ====== GPS Settings ======
 
 Related instructions `AT+GPS=1`, turn on GPS <br>
@@ -302,18 +375,78 @@ Some one time configs:<br>
 `+CMGS: n` : SMS has been sent.
 `+CIEV: "SMSFULL",2` : Inbox is full.
 
+# module init
+AT
+AT+CPIN?
+wait for +CPIN: READY
+
+AT+CFUN=1
+AT+CMEE=2
+AT+CBATCHK=1
+AT+CREG?
+wait for +CREG: 0,
+
+AT+CMGF=1
+wait for OK
+
+# HTTP init
+AT+SAPBR=0,1
+AT+SAPBR=3,1,"Contype","GPRS"
+AT+SAPBR=3,1,"APN",<APN>
+AT+SAPBR=3,1,"USER",<USER>
+AT+SAPBR=3,1,"PASS",<PASS>
+AT+SAPBR=1,1
+AT+SAPBR=2,1
+
+CHECK ID CONNECTED TO INTERNET 
+AT+CGATT?
+check for =CGATT:1
+anything else means not connected
+# HTTP request
+
+AT+HTTPINIT
+AT+HTTPSSL=1
+AT+HTTPPARA="CID",1
+AT+HTTPPARA="URL",<FIREBASE_HOST>.json?auth=<FIREBASE_SECRET>
+AT+HTTPPARA="REDIR",1
+AT+HTTPPARA="CONTENT","application/json"
+AT+HTTPDATA=<String(data.length())>,10000
+wait for response "download"
+send data
+AT+HTTPACTION=1
+check response
+
+if(response.indexOf("+HTTPACTION:") > 0)
+{
+Serial.println(response);
+break;
+}
+
+//+HTTPACTION: 1,603,0 (POST to Firebase failed)
+//+HTTPACTION: 0,200,0 (POST to Firebase successfull)
+//Read the response
+AT+HTTPREAD
+
+stop connection
+AT+HTTPTERM
+
+# disconnect gprs
+AT+CGATT=0
+
 # TO DO
 
-- [x] Shift to ESP32. As it may have more than 1 hardware serial ports
-- [x] Get GPS Co-Ordinates
-- [x] Send SMS on button press
-- [x] Send SMS to multiple devices [git](https://github.com/ahmadlogs/nodemcu/blob/main/sim800l-gps-reg-phone/sim800l-gps-reg-phone.ino)
-- [x] Receive call always
-- [ ] Send GPS to Firebase
-- [ ] SetUp - customize emergency contacts.
-- [ ] LED Indicator
-- [ ] Send SMS only if location changes
-- [ ] if location not fetched, keep fetching
-- [ ] Delete received SMS
-- [ ]
+-   [x] Shift to ESP32. As it may have more than 1 hardware serial ports
+-   [x] Get GPS Co-Ordinates
+-   [x] Send SMS on button press
+-   [x] Send SMS to multiple devices [git](https://github.com/ahmadlogs/nodemcu/blob/main/sim800l-gps-reg-phone/sim800l-gps-reg-phone.ino)
+-   [x] Receive call always
+-   [x] Send GPS to Firebase
+-   [ ] SetUp - customize emergency contacts.
+-   [ ] LED Indicator
+-   [x] Send SMS only if location changes
+-   [ ] if location not fetched, keep fetching
+-   [ ] Delete received SMS
+-   [ ] Setup safe show removal
+-   [ ] sms IS NOT BEING SENT AGAIN
+PLEASE CHECK
 
