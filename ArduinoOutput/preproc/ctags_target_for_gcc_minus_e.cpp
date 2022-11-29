@@ -17,7 +17,7 @@ bool ATOK = false;
 bool gpscall = false;
 boolean unsafe = false;
 
-String msg, latitude = "0", longitude = "0", temp;
+String msg, latitude = "0", longitude = "0", temp, lastcoordinates = "";
 String senderNumber = "+919372391056,";
 
 int lastTriggerButtonState = 0x0;
@@ -52,7 +52,7 @@ void setup()
   pinMode(22, 0x01);
   pinMode(23, 0x01);
   // ---------------------------------------------------
-  // powerOn();
+  powerOn();
   setupA9G();
   firebaseSetup();
 }
@@ -137,21 +137,20 @@ void getGPS()
   {
     index = replyfromA9G.indexOf(",");
     Serial.println("Found");
+    lastcoordinates = latitude + "," + longitude;
     latitude = replyfromA9G.substring(0, index);
     longitude = replyfromA9G.substring(index + 1, replyfromA9G.length());
     Serial.println((String)latitude + (String)longitude);
   }
   alertSMS(latitude, longitude);
-
   // TODO firebase send function
-  // temp = latitude + "," + longitude;
-  // if (!temp.equals(replyfromA9G))
-  // {
-  // Serial.println("Co-Ordinates didnot change!");
-  //   firebaseSend(getTime(), latitude, longitude);
-  // }
+  temp = latitude + "," + longitude;
+  if (!temp.equals(lastcoordinates))
+  {
+    Serial.println("Co-Ordinates didnot change!");
+    firebaseSend(getTime(), latitude, longitude);
+  }
   gpscall = false;
-
   Serial.println("--------------------End getGPS-------------------------");
 }
 
@@ -384,32 +383,28 @@ void parseData(String replyfromA9G)
 String getTime()
 {
   //  TODO check this
-  String currenttime;
+  String currenttime = "", replyfromA9G;
   noparseupdate();
   Serial2.println("AT+CCLK?");
-  wait(1000);
-  for (unsigned long previous = millis(); (millis() - previous) < 5000;)
+  Serial.println("gettime");
+  wait(2000);
+  while (Serial2.available())
   {
-    while (Serial2.available())
+    replyfromA9G = Serial2.readString();
+  }
+  replyfromA9G.trim();
+  if (replyfromA9G.indexOf("+CCLK:") >= 0)
+  {
+    currenttime=replyfromA9G;
+    int index = currenttime.indexOf(":");
+    currenttime.remove(0, index + 1);
+    currenttime.remove(0, currenttime.indexOf('"') + 1);
+    currenttime.remove(currenttime.indexOf('"'), currenttime.length());
+    for (int i = 0; i < 2; i++)
     {
-      currenttime = Serial2.readString();
-      if (currenttime.indexOf("+CCLK:") >= 0)
-      {
-        int index = currenttime.indexOf("\r");
-        currenttime.remove(0, index + 2);
-        currenttime.trim();
-        currenttime.remove(0, index + 1);
-        index = currenttime.indexOf(":");
-        currenttime.remove(0, index + 1);
-        for (int i = 0; i < 2; i++)
-        {
-          currenttime.replace('/', '-');
-        }
-        Serial.println("Captured time: " + currenttime);
-        break;
-      }
+      currenttime.replace('/', '-');
     }
-    Serial.println(currenttime);
+    Serial.println("Captured time: " + currenttime);
   }
   return currenttime;
 }
@@ -472,6 +467,7 @@ void firebaseSend(String currenttime, String latitude, String longitude)
       if (Firebase.Firestore.createDocument(&fbdo, "stepsafe-81b78", "", documentPath.c_str(), content.raw()))
       {
         Serial.println("Updated in Firebase!");
+        lastcoordinates = latitude + "," + longitude;
         break;
       }
       else

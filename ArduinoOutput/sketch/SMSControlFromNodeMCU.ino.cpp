@@ -18,7 +18,7 @@ bool ATOK = false;
 bool gpscall = false;
 boolean unsafe = false;
 
-String msg, latitude = "0", longitude = "0", temp;
+String msg, latitude = "0", longitude = "0", temp, lastcoordinates = "";
 String senderNumber = "+919372391056,";
 
 int lastTriggerButtonState = LOW;
@@ -46,29 +46,29 @@ void loop();
 void checktriggered();
 #line 108 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
 void getGPS();
-#line 210 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
+#line 209 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
 void noparseupdate();
-#line 218 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
+#line 217 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
 void alertSMS(String latitude, String longitude);
-#line 251 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
+#line 250 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
 void updateSerial();
-#line 265 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
+#line 264 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
 void wait(int millisec);
-#line 272 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
+#line 271 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
 void powerOn();
-#line 301 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
+#line 300 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
 void resetA9G();
-#line 309 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
+#line 308 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
 void setupA9G();
-#line 317 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
+#line 316 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
 void parseData(String replyfromA9G);
-#line 380 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
+#line 379 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
 String getTime();
-#line 413 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
+#line 408 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
 void fcsUploadCallback(CFS_UploadStatusInfo info);
-#line 437 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
+#line 432 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
 void firebaseSetup();
-#line 454 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
+#line 449 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
 void firebaseSend(String currenttime, String latitude, String longitude);
 #line 39 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
 void setup()
@@ -86,7 +86,7 @@ void setup()
   pinMode(TRIGGER_BUTTON, INPUT);
   pinMode(SAFE_BUTTON, INPUT);
   // ---------------------------------------------------
-  // powerOn();
+  powerOn();
   setupA9G();
   firebaseSetup();
 }
@@ -168,21 +168,20 @@ void getGPS()
   {
     index = replyfromA9G.indexOf(",");
     Serial.println("Found");
+    lastcoordinates = latitude + "," + longitude;
     latitude = replyfromA9G.substring(0, index);
     longitude = replyfromA9G.substring(index + 1, replyfromA9G.length());
     Serial.println((String)latitude + (String)longitude);
   }
   alertSMS(latitude, longitude);
-  
   // TODO firebase send function
-  // temp = latitude + "," + longitude;
-  // if (!temp.equals(replyfromA9G))
-  // {
-  // Serial.println("Co-Ordinates didnot change!");
-  //   firebaseSend(getTime(), latitude, longitude);
-  // }
+  temp = latitude + "," + longitude;
+  if (!temp.equals(lastcoordinates))
+  {
+    Serial.println("Co-Ordinates didnot change!");
+    firebaseSend(getTime(), latitude, longitude);
+  }
   gpscall = false;
-
   Serial.println("--------------------End getGPS-------------------------");
 }
 
@@ -415,32 +414,28 @@ void parseData(String replyfromA9G)
 String getTime()
 {
   //  TODO check this
-  String currenttime;
+  String currenttime = "", replyfromA9G;
   noparseupdate();
   Serial2.println("AT+CCLK?");
-  wait(1000);
-  for (unsigned long previous = millis(); (millis() - previous) < 5000;)
+  Serial.println("gettime");
+  wait(2000);
+  while (Serial2.available())
   {
-    while (Serial2.available())
+    replyfromA9G = Serial2.readString();
+  }
+  replyfromA9G.trim();
+  if (replyfromA9G.indexOf("+CCLK:") >= 0)
+  {
+    currenttime=replyfromA9G;
+    int index = currenttime.indexOf(":");
+    currenttime.remove(0, index + 1);
+    currenttime.remove(0, currenttime.indexOf('"') + 1);
+    currenttime.remove(currenttime.indexOf('"'), currenttime.length());
+    for (int i = 0; i < 2; i++)
     {
-      currenttime = Serial2.readString();
-      if (currenttime.indexOf("+CCLK:") >= 0)
-      {
-        int index = currenttime.indexOf("\r");
-        currenttime.remove(0, index + 2);
-        currenttime.trim();
-        currenttime.remove(0, index + 1);
-        index = currenttime.indexOf(":");
-        currenttime.remove(0, index + 1);
-        for (int i = 0; i < 2; i++)
-        {
-          currenttime.replace('/', '-');
-        }
-        Serial.println("Captured time: " + currenttime);
-        break;
-      }
+      currenttime.replace('/', '-');
     }
-    Serial.println(currenttime);
+    Serial.println("Captured time: " + currenttime);
   }
   return currenttime;
 }
@@ -503,6 +498,7 @@ void firebaseSend(String currenttime, String latitude, String longitude)
       if (Firebase.Firestore.createDocument(&fbdo, FIREBASE_PROJECT_ID, "", documentPath.c_str(), content.raw()))
       {
         Serial.println("Updated in Firebase!");
+        lastcoordinates = latitude + "," + longitude;
         break;
       }
       else
