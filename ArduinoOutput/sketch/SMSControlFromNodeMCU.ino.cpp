@@ -42,33 +42,33 @@ FirebaseConfig config;
 void setup();
 #line 60 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
 void loop();
-#line 75 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
+#line 76 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
 void checktriggered();
-#line 106 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
+#line 108 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
 void getGPS();
-#line 207 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
+#line 210 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
 void noparseupdate();
-#line 215 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
+#line 218 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
 void alertSMS(String latitude, String longitude);
-#line 248 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
+#line 251 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
 void updateSerial();
-#line 262 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
+#line 265 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
 void wait(int millisec);
-#line 269 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
+#line 272 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
 void powerOn();
-#line 298 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
+#line 301 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
 void resetA9G();
-#line 306 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
+#line 309 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
 void setupA9G();
-#line 314 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
+#line 317 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
 void parseData(String replyfromA9G);
-#line 377 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
+#line 380 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
 String getTime();
-#line 410 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
+#line 413 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
 void fcsUploadCallback(CFS_UploadStatusInfo info);
-#line 434 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
+#line 437 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
 void firebaseSetup();
-#line 451 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
+#line 454 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
 void firebaseSend(String currenttime, String latitude, String longitude);
 #line 39 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
 void setup()
@@ -98,6 +98,7 @@ void loop()
   if (unsafe == true && ((millis() - lastsmsmillis) > alertDelay || lastsmsmillis == 0))
   {
     getGPS();
+    lastsmsmillis = millis();
   }
   updateSerial();
 }
@@ -109,6 +110,7 @@ true : triggered,
 false : not triggered*/
 void checktriggered()
 {
+  // TODO check for false triggers by leg
   if (unsafeFlag && millis() - triggertime > 15000)
   {
     Serial.println("Emergency!!!");
@@ -130,7 +132,7 @@ void checktriggered()
       else if (safeButtonState == HIGH)
       {
         Serial.println("Safe removal");
-        unsafe = false;
+        unsafeFlag = false;
       }
       lastTriggerButtonState = triggerButtonState;
       lastSafeButtonState = safeButtonState;
@@ -144,7 +146,7 @@ void getGPS()
   gpscall = true;
   noparseupdate();
   Serial2.println("AT+LOCATION=2\r");
-  Serial2.println("AT+LOCATION=2\r");
+  Serial.println("Get gps called");
   wait(2000);
   while (Serial2.available())
   {
@@ -169,17 +171,18 @@ void getGPS()
     latitude = replyfromA9G.substring(0, index);
     longitude = replyfromA9G.substring(index + 1, replyfromA9G.length());
     Serial.println((String)latitude + (String)longitude);
-    alertSMS(latitude, longitude);
-    // TODO firebase send function
-    // temp = latitude + "," + longitude;
-    // if (!temp.equals(replyfromA9G))
-    // {
-    // Serial.println("Co-Ordinates didnot change!");
-    //   firebaseSend(getTime(), latitude, longitude);
-    // }
-
-    gpscall = false;
   }
+  alertSMS(latitude, longitude);
+  
+  // TODO firebase send function
+  // temp = latitude + "," + longitude;
+  // if (!temp.equals(replyfromA9G))
+  // {
+  // Serial.println("Co-Ordinates didnot change!");
+  //   firebaseSend(getTime(), latitude, longitude);
+  // }
+  gpscall = false;
+
   Serial.println("--------------------End getGPS-------------------------");
 }
 

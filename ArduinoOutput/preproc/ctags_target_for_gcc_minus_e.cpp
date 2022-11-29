@@ -64,6 +64,7 @@ void loop()
   if (unsafe == true && ((millis() - lastsmsmillis) > alertDelay || lastsmsmillis == 0))
   {
     getGPS();
+    lastsmsmillis = millis();
   }
   updateSerial();
 }
@@ -75,9 +76,10 @@ void loop()
 true : triggered,
 
 false : not triggered*/
-# 75 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
+# 76 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
 void checktriggered()
 {
+  // TODO check for false triggers by leg
   if (unsafeFlag && millis() - triggertime > 15000)
   {
     Serial.println("Emergency!!!");
@@ -99,7 +101,7 @@ void checktriggered()
       else if (safeButtonState == 0x1)
       {
         Serial.println("Safe removal");
-        unsafe = false;
+        unsafeFlag = false;
       }
       lastTriggerButtonState = triggerButtonState;
       lastSafeButtonState = safeButtonState;
@@ -113,7 +115,7 @@ void getGPS()
   gpscall = true;
   noparseupdate();
   Serial2.println("AT+LOCATION=2\r");
-  Serial2.println("AT+LOCATION=2\r");
+  Serial.println("Get gps called");
   wait(2000);
   while (Serial2.available())
   {
@@ -138,17 +140,18 @@ void getGPS()
     latitude = replyfromA9G.substring(0, index);
     longitude = replyfromA9G.substring(index + 1, replyfromA9G.length());
     Serial.println((String)latitude + (String)longitude);
-    alertSMS(latitude, longitude);
-    // TODO firebase send function
-    // temp = latitude + "," + longitude;
-    // if (!temp.equals(replyfromA9G))
-    // {
-    // Serial.println("Co-Ordinates didnot change!");
-    //   firebaseSend(getTime(), latitude, longitude);
-    // }
-
-    gpscall = false;
   }
+  alertSMS(latitude, longitude);
+
+  // TODO firebase send function
+  // temp = latitude + "," + longitude;
+  // if (!temp.equals(replyfromA9G))
+  // {
+  // Serial.println("Co-Ordinates didnot change!");
+  //   firebaseSend(getTime(), latitude, longitude);
+  // }
+  gpscall = false;
+
   Serial.println("--------------------End getGPS-------------------------");
 }
 
