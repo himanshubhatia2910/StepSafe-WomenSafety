@@ -1,0 +1,667 @@
+[
+  {
+    "Sourcefile": null,
+    "Include": "",
+    "Includepath": "C:\\Users\\dhuri\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\1.0.6\\cores\\esp32"
+  },
+  {
+    "Sourcefile": null,
+    "Include": "",
+    "Includepath": "C:\\Users\\dhuri\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\1.0.6\\variants\\esp32"
+  },
+  {
+    "Sourcefile": "d:\\StepSafe\\StepSafe-WomenSafety\\ArduinoOutput\\sketch\\SMSControlFromNodeMCU.ino.cpp",
+    "Include": "Firebase_ESP_Client.h",
+    "Includepath": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src"
+  },
+  {
+    "Sourcefile": "d:\\StepSafe\\StepSafe-WomenSafety\\ArduinoOutput\\sketch\\SMSControlFromNodeMCU.ino.cpp",
+    "Include": "SPIFFS.h",
+    "Includepath": "C:\\Users\\dhuri\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\1.0.6\\libraries\\SPIFFS\\src"
+  },
+  {
+    "Sourcefile": "d:\\StepSafe\\StepSafe-WomenSafety\\ArduinoOutput\\sketch\\SMSControlFromNodeMCU.ino.cpp",
+    "Include": "FS.h",
+    "Includepath": "C:\\Users\\dhuri\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\1.0.6\\libraries\\FS\\src"
+  },
+  {
+    "Sourcefile": "d:\\StepSafe\\StepSafe-WomenSafety\\ArduinoOutput\\sketch\\SMSControlFromNodeMCU.ino.cpp",
+    "Include": "SD.h",
+    "Includepath": "C:\\Users\\dhuri\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\1.0.6\\libraries\\SD\\src"
+  },
+  {
+    "Sourcefile": "d:\\StepSafe\\StepSafe-WomenSafety\\ArduinoOutput\\sketch\\SMSControlFromNodeMCU.ino.cpp",
+    "Include": "SPI.h",
+    "Includepath": "C:\\Users\\dhuri\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\1.0.6\\libraries\\SPI\\src"
+  },
+  {
+    "Sourcefile": "d:\\StepSafe\\StepSafe-WomenSafety\\ArduinoOutput\\sketch\\SMSControlFromNodeMCU.ino.cpp",
+    "Include": "WiFi.h",
+    "Includepath": "C:\\Users\\dhuri\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\1.0.6\\libraries\\WiFi\\src"
+  },
+  {
+    "Sourcefile": "d:\\StepSafe\\StepSafe-WomenSafety\\ArduinoOutput\\sketch\\SMSControlFromNodeMCU.ino.cpp",
+    "Include": "WiFiClientSecure.h",
+    "Includepath": "C:\\Users\\dhuri\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\1.0.6\\libraries\\WiFiClientSecure\\src"
+  },
+  {
+    "Sourcefile": "d:\\StepSafe\\StepSafe-WomenSafety\\ArduinoOutput\\sketch\\SMSControlFromNodeMCU.ino.cpp",
+    "Include": "Update.h",
+    "Includepath": "C:\\Users\\dhuri\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\1.0.6\\libraries\\Update\\src"
+  },
+  {
+    "Sourcefile": "d:\\StepSafe\\StepSafe-WomenSafety\\ArduinoOutput\\sketch\\SMSControlFromNodeMCU.ino.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\Firebase.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\i15_bitlen.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\i15_decred.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\i15_fmont.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\i15_iszero.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\i15_moddiv.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\i15_modpow2.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\i15_mulacc.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\i15_ninv15.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\i15_reduce.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\i15_rshift.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\i31_add.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\i31_bitlen.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\i31_decmod.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\i31_decode.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\i31_decred.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\i31_encode.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\i31_fmont.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\i31_iszero.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\i31_moddiv.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\i31_modpow.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\i31_modpow2.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\i31_montmul.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\i31_mulacc.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\i31_muladd.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\i31_ninv31.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\i31_reduce.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\i31_rshift.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\i31_sub.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\i31_tmont.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\i32_div32.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\rsa_default_keygen.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\rsa_default_modulus.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\rsa_default_oaep_decrypt.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\rsa_default_oaep_encrypt.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\rsa_default_pkcs1_sign.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\rsa_default_pkcs1_vrfy.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\rsa_default_priv.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\rsa_default_privexp.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\rsa_default_pub.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\rsa_default_pubexp.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\rsa_i15_keygen.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\rsa_i15_modulus.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\rsa_i15_oaep_decrypt.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\rsa_i15_oaep_encrypt.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\rsa_i15_pkcs1_sign.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\rsa_i15_pkcs1_vrfy.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\rsa_i15_priv.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\rsa_i15_privexp.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\rsa_i15_pub.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\rsa_i15_pubexp.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\rsa_i31_keygen.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\rsa_i31_keygen_inner.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\rsa_i31_modulus.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\rsa_i31_oaep_decrypt.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\rsa_i31_oaep_encrypt.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\rsa_i31_pkcs1_sign.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\rsa_i31_pkcs1_vrfy.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\rsa_i31_priv.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\rsa_i31_privexp.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\rsa_i31_pub.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\rsa_i31_pubexp.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\rsa_i32_oaep_decrypt.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\rsa_i32_oaep_encrypt.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\rsa_i32_pkcs1_sign.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\rsa_i32_pkcs1_vrfy.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\rsa_i32_priv.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\rsa_i32_pub.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\rsa_i62_keygen.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\rsa_i62_oaep_decrypt.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\rsa_i62_oaep_encrypt.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\rsa_i62_pkcs1_sign.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\rsa_i62_pkcs1_vrfy.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\rsa_i62_priv.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\rsa_i62_pub.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\rsa_oaep_pad.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\rsa_oaep_unpad.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\rsa_pkcs1_sig_pad.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\rsa_pkcs1_sig_unpad.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\rsa_ssl_decrypt.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\bearssl\\settings.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\firestore\\FB_Firestore.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\functions\\FB_Functions.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\functions\\FunctionsConfig.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\functions\\PocicyBuilder.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\gcs\\GCS.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\json\\FirebaseJson.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\json\\MB_JSON\\MB_JSON.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\json\\extras\\print\\fb_json_print.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\message\\FCM.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\rtdb\\FB_RTDB.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\rtdb\\QueryFilter.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\rtdb\\QueueInfo.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\rtdb\\QueueManager.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\rtdb\\stream\\FB_MP_Stream.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\rtdb\\stream\\FB_Stream.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\session\\FB_Session.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\signer\\Signer.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\storage\\FCS.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\wcs\\esp32\\FB_TCP_Client.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\Documents\\Arduino\\libraries\\Firebase_Arduino_Client_Library_for_ESP8266_and_ESP32\\src\\wcs\\esp8266\\FB_TCP_Client.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\1.0.6\\libraries\\SPIFFS\\src\\SPIFFS.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\1.0.6\\libraries\\FS\\src\\FS.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\1.0.6\\libraries\\FS\\src\\vfs_api.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\1.0.6\\libraries\\SD\\src\\SD.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\1.0.6\\libraries\\SD\\src\\sd_diskio.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\1.0.6\\libraries\\SD\\src\\sd_diskio_crc.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\1.0.6\\libraries\\SPI\\src\\SPI.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\1.0.6\\libraries\\WiFi\\src\\ETH.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\1.0.6\\libraries\\WiFi\\src\\WiFi.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\1.0.6\\libraries\\WiFi\\src\\WiFiAP.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\1.0.6\\libraries\\WiFi\\src\\WiFiClient.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\1.0.6\\libraries\\WiFi\\src\\WiFiGeneric.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\1.0.6\\libraries\\WiFi\\src\\WiFiMulti.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\1.0.6\\libraries\\WiFi\\src\\WiFiSTA.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\1.0.6\\libraries\\WiFi\\src\\WiFiScan.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\1.0.6\\libraries\\WiFi\\src\\WiFiServer.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\1.0.6\\libraries\\WiFi\\src\\WiFiUdp.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\1.0.6\\libraries\\WiFiClientSecure\\src\\WiFiClientSecure.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\1.0.6\\libraries\\WiFiClientSecure\\src\\ssl_client.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\1.0.6\\libraries\\Update\\src\\HttpsOTAUpdate.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\dhuri\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\1.0.6\\libraries\\Update\\src\\Updater.cpp",
+    "Include": "",
+    "Includepath": null
+  }
+]

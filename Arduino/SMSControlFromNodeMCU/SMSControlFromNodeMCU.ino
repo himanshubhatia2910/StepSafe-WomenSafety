@@ -4,6 +4,7 @@
 #define RESET_PIN 21
 #define builtin_led 2
 #define TRIGGER_BUTTON 22
+#define SAFE_BUTTON 23
 #define RED_LED 5
 #define GREEN_LED 18
 #define BLUE_LED 19
@@ -13,10 +14,18 @@
 bool GPSFixed = false;
 bool ATOK = false;
 bool gpscall = false;
+boolean unsafe = false;
 
-String msg, latitude = "0", longitude = "0", currenttime;
-String senderNumber = "+919372391056,+917499599400,";
+String msg, latitude = "0", longitude = "0", temp;
+String senderNumber = "+919372391056,";
+
+int lastTriggerButtonState = LOW;
+int lastSafeButtonState = LOW;
+boolean unsafeFlag = false;
+unsigned long triggertime;
 unsigned long dataMillis = 0;
+unsigned long lastsmsmillis = 0;
+int alertDelay = 60000; // 3600000 hourly
 
 // ------------------------------------------------------------
 #include <Firebase_ESP_Client.h>
@@ -40,18 +49,21 @@ void setup()
   pinMode(BLUE_LED, OUTPUT);
   pinMode(GREEN_LED, OUTPUT);
   pinMode(TRIGGER_BUTTON, INPUT);
+  pinMode(SAFE_BUTTON, INPUT);
   // ---------------------------------------------------
-  powerOn();
+  // powerOn();
   setupA9G();
   firebaseSetup();
-  
 }
 
 // NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
 void loop()
 {
-  // updateSerial();
   checktriggered();
+  if (unsafe == true && ((millis() - lastsmsmillis) > alertDelay || lastsmsmillis == 0))
+  {
+    getGPS();
+  }
   updateSerial();
 }
 
@@ -60,23 +72,80 @@ void loop()
 /*@result
 true : triggered,
 false : not triggered*/
-bool checktriggered()
+void checktriggered()
 {
-  int read = digitalRead(TRIGGER_BUTTON);
-  if (read == HIGH)
+  if (unsafeFlag && millis() - triggertime > 15000)
   {
-    Serial.println("Triggered");
-    getGPS();
-    return true;
+    Serial.println("Emergency!!!");
+    unsafe = true;
+    unsafeFlag = false;
   }
-  return false;
+  else
+  {
+    int triggerButtonState = digitalRead(TRIGGER_BUTTON);
+    int safeButtonState = digitalRead(SAFE_BUTTON);
+    if (triggerButtonState != lastTriggerButtonState || safeButtonState != lastSafeButtonState)
+    {
+      if (triggerButtonState == HIGH && safeButtonState == LOW)
+      {
+        Serial.println("TRIGGER Button CAUGHT");
+        triggertime = millis();
+        unsafeFlag = true;
+      }
+      else if (safeButtonState == HIGH)
+      {
+        Serial.println("Safe removal");
+        unsafe = false;
+      }
+      lastTriggerButtonState = triggerButtonState;
+      lastSafeButtonState = safeButtonState;
+    }
+  }
 }
 
 void getGPS()
 {
+  String replyfromA9G;
   gpscall = true;
+  noparseupdate();
   Serial2.println("AT+LOCATION=2\r");
-  updateSerial();
+  Serial1.println("Get gps called");
+  wait(2000);
+  while (Serial2.available())
+  {
+    replyfromA9G = Serial2.readString();
+  }
+  Serial.println("\n\n------------------------------\n" + replyfromA9G + "\n------------------------------");
+  int index = replyfromA9G.indexOf("\r");
+  replyfromA9G.remove(0, index + 2);
+  replyfromA9G.trim();
+  //---------------------------------------------------------
+  Serial.println("Checking if gps coordinates");
+  if (replyfromA9G.indexOf("GPS NOT FIX NOW") != -1 || replyfromA9G.indexOf("+CME") != -1)
+  {
+    Serial.println("GPS not fixed caught");
+    noparseupdate();
+    // Serial.println(replyfromA9G);
+  }
+  else
+  {
+    index = replyfromA9G.indexOf(",");
+    Serial.println("Found");
+    latitude = replyfromA9G.substring(0, index);
+    longitude = replyfromA9G.substring(index + 1, replyfromA9G.length());
+    Serial.println((String)latitude + (String)longitude);
+    alertSMS(latitude, longitude);
+    // TODO firebase send function
+    // temp = latitude + "," + longitude;
+    // if (!temp.equals(replyfromA9G))
+    // {
+    // Serial.println("Co-Ordinates didnot change!");
+    //   firebaseSend(getTime(), latitude, longitude);
+    // }
+
+    gpscall = false;
+  }
+  Serial.println("--------------------End getGPS-------------------------");
 }
 
 boolean getResponse(String expected_answer, int timeout = 1000)
@@ -143,9 +212,17 @@ void noparseupdate()
   }
 }
 
-void alertSMS(String msg)
+void alertSMS(String latitude, String longitude)
 {
   Serial.println("Inside AlertSMS function");
+  String msg = "!!!!!!!!!! SOS !!!!!!!!!!\nI am in an emergency. Here's my location:\n";
+  msg = msg + "Latitude: " + latitude;
+  msg = msg + "\nLongitude: " + longitude;
+  msg += "\nhttps://www.google.com/maps/search/?api=1&query=";
+  msg += latitude;
+  msg += ",";
+  msg += longitude;
+
   int startIndex = 0;
   int endIndex = senderNumber.indexOf(",", startIndex);
   while (endIndex != -1)
@@ -171,15 +248,15 @@ void alertSMS(String msg)
 void updateSerial()
 {
   // TO CARRY FORWARD THE COMMANDS FROM SERIAL
-  // while (Serial.available())
-  // {
-  //   Serial2.write(Serial.read()); // Forward what Serial received to Software Serial Port
-  // }
+  while (Serial.available())
+  {
+    Serial2.write(Serial.read()); // Forward what Serial received to Software Serial Port
+  }
   while (Serial2.available())
   {
     parseData(Serial2.readString());
   }
-  wait(2000);
+  // wait(2000);
 }
 
 void wait(int millisec)
@@ -239,7 +316,7 @@ void parseData(String replyfromA9G)
   Serial.println("Parsing reply from A9G: ");
 
   unsigned int index;
-  //---------------------------------------------------------
+  // ---------------------------------------------------------
   // Remove sent "AT Command" from the response string.
   index = replyfromA9G.indexOf("\r");
   replyfromA9G.remove(0, index + 2);
@@ -252,42 +329,32 @@ void parseData(String replyfromA9G)
     Serial.println("ok caught " + replyfromA9G);
     return;
   }
-  else if (gpscall)
-  {
-    Serial.println("Checking if gps coordinates");
-    if (replyfromA9G.indexOf("GPS NOT FIX NOW") != -1)
-    {
-      Serial.println("GPS not fixed caught");
-      noparseupdate();
-      Serial.println(replyfromA9G);
-//      gpscall = false;
-//      return;
-    }
-    msg = latitude + "," + longitude;
-    if (msg.equals(replyfromA9G))
-    {
-      Serial.println("Co-Ordinates didnot change!");
-//      gpscall = false;
-//      return;
-    }
-    index = replyfromA9G.indexOf(",");
-    Serial.println("Found");
-    GPSFixed = true;
-    latitude = replyfromA9G.substring(0, index);
-    longitude = replyfromA9G.substring(index + 1, replyfromA9G.length());
-    msg = "StepSafe Shoe has been triggered\nThe last known coordinates tracked by the shoe are:\n";
-    msg = msg + "Latitude: " + latitude;
-    msg = msg + "\nLongitude: " + longitude;
-    msg += "\nhttps://www.google.com/maps/search/?api=1&query=";
-    msg += latitude;
-    msg += ",";
-    msg += longitude;
-    // variable msg contains the message to be sent.
-    alertSMS(msg);
-    getTime();
-    firebaseSend();
-    gpscall = false;
-  }
+  // else if (gpscall)
+  // {
+  //   Serial.println("Checking if gps coordinates");
+  //   if (replyfromA9G.indexOf("GPS NOT FIX NOW") != -1)
+  //   {
+  //     Serial.println("GPS not fixed caught");
+  //     noparseupdate();
+  //     Serial.println(replyfromA9G);
+  //     //      gpscall = false;
+  //     //      return;
+  //   }
+  //   index = replyfromA9G.indexOf(",");
+  //   Serial.println("Found");
+  //   GPSFixed = true;
+  //   latitude = replyfromA9G.substring(0, index);
+  //   longitude = replyfromA9G.substring(index + 1, replyfromA9G.length());
+  //   // variable msg contains the message to be sent.
+  //   alertSMS(latitude, longitude);
+  //   temp = latitude + "," + longitude;
+  //   if (!temp.equals(replyfromA9G))
+  //   {
+  //     firebaseSend(getTime(), latitude, longitude);
+  //   }
+  //   Serial.println("Co-Ordinates didnot change!");
+  //   gpscall = false;
+  // }
   else if (replyfromA9G.indexOf("+CME ERROR:") != -1)
   {
     Serial.println("Error has occured");
@@ -307,19 +374,37 @@ void parseData(String replyfromA9G)
   }
 }
 //---------------------------------------------------------
-void getTime()
+String getTime()
 {
-//  TODO check this
-//  Serial2.println("AT+CCLK?");
-//  while (Serial2.available())
-//  {
-//    currenttime = Serial2.readString();
-//    for (int i = 0; i < 2; i++)
-//    {
-//      currenttime.replace('/', '-');
-//    }
-//  }
-//  noparseupdate();
+  //  TODO check this
+  String currenttime;
+  noparseupdate();
+  Serial2.println("AT+CCLK?");
+  wait(1000);
+  for (unsigned long previous = millis(); (millis() - previous) < 5000;)
+  {
+    while (Serial2.available())
+    {
+      currenttime = Serial2.readString();
+      if (currenttime.indexOf("+CCLK:") >= 0)
+      {
+        int index = currenttime.indexOf("\r");
+        currenttime.remove(0, index + 2);
+        currenttime.trim();
+        currenttime.remove(0, index + 1);
+        index = currenttime.indexOf(":");
+        currenttime.remove(0, index + 1);
+        for (int i = 0; i < 2; i++)
+        {
+          currenttime.replace('/', '-');
+        }
+        Serial.println("Captured time: " + currenttime);
+        break;
+      }
+    }
+    Serial.println(currenttime);
+  }
+  return currenttime;
 }
 
 void fcsUploadCallback(CFS_UploadStatusInfo info)
@@ -349,11 +434,11 @@ void fcsUploadCallback(CFS_UploadStatusInfo info)
 void firebaseSetup()
 {
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-//  while (WiFi.status() != WL_CONNECTED)
-//  {
-//    Serial.print(".");
-//    wait(300);
-//  }
+  //  while (WiFi.status() != WL_CONNECTED)
+  //  {
+  //    Serial.print(".");
+  //    wait(300);
+  //  }
   config.api_key = API_KEY;
   auth.user.email = USER_EMAIL;
   auth.user.password = USER_PASSWORD;
@@ -363,23 +448,25 @@ void firebaseSetup()
   Firebase.reconnectWiFi(true);
 }
 
-void firebaseSend()
+void firebaseSend(String currenttime, String latitude, String longitude)
 {
-  while (Firebase.ready())
+  while (Firebase.ready() && gpscall)
   {
-    if (millis() - dataMillis > 30000 || dataMillis == 0&&gpscall)
+    if (millis() - dataMillis > 30000 || dataMillis == 0)
     {
       dataMillis = millis();
       FirebaseJson content;
-      String documentPath = "Location/History/up8ERAvfOlWkxNXp4vZ53fdL6eF2/" + (String)currenttime;
+      String documentPath = "Location/History/up8ERAvfOlWkxNXp4vZ53fdL6eF2/" + currenttime;
       String doc_path = "projects/";
       doc_path += FIREBASE_PROJECT_ID;
       doc_path += "/databases/(default)/documents/coll_id/doc_id"; // coll_id and doc_id are your collection id and document id
       content.set("fields/myLatLng/geoPointValue/latitude", latitude.toDouble());
       content.set("fields/myLatLng/geoPointValue/longitude", longitude.toDouble());
-      if (Firebase.Firestore.createDocument(&fbdo, FIREBASE_PROJECT_ID, "", documentPath.c_str(), content.raw())){
+      if (Firebase.Firestore.createDocument(&fbdo, FIREBASE_PROJECT_ID, "", documentPath.c_str(), content.raw()))
+      {
         Serial.println("Updated in Firebase!");
-        break;}
+        break;
+      }
       else
         Serial.println(fbdo.errorReason() + "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     }
