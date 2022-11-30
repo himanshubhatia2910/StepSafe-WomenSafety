@@ -38,36 +38,38 @@
             android:textAlignment="center"
             android:textColor="#6C63FF"
             android:textSize="18sp" />
-    <LinearLayout
-        android:id="@+id/linear2"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#F0F4F3"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="parent">
-        <TextView
-            android:id="@+id/location"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/poppins_bold"
-            android:gravity="center_horizontal"
-            android:text="Live Location"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="65dp"
-            android:layout_marginRight="20dp"
-            android:textAlignment="center"
-            android:textColor="#6C63FF"
-            android:textSize="18sp" />
-
         <Switch
             android:id="@+id/idSwitch"
             android:layout_marginTop="10dp"
             android:layout_width="wrap_content"
+            android:textSize="18sp"
+            android:layout_marginLeft="20dp"
             android:thumbTint="@color/blue"
+            android:text="Live Location"
+            android:fontFamily="@font/poppins_bold"
+            android:textStyle="bold"
+            android:textColor="#6C63FF"
             app:trackTint="@color/purple_700"
             android:layout_height="wrap_content" />
 
-    </LinearLayout>
-    </LinearLayout>
+            <TextView
+                android:id="@+id/coordinates"
+                android:layout_width="295dp"
+                android:layout_height="75dp"
+                android:layout_below="@id/num"
+                android:layout_marginTop="25dp"
+                android:background="@drawable/helpline"
+                android:fontFamily="@font/poppins_bold"
+                android:paddingLeft="10dp"
+                android:textColor="#6C63FF" />
+        <Button
+            android:id="@+id/save"
+            android:layout_width="295dp"
+            android:layout_height="50dp"
+            android:layout_below="@id/contact"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/login_button"
+            android:text="Share Location" />
+        </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
