@@ -25,6 +25,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 public class HomeFragment extends Fragment {
+    ImageView rImage;
 
     private FragmentHomeBinding binding;
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -35,6 +36,9 @@ public class HomeFragment extends Fragment {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         return root;
+
+
+
     }
 
     @Override

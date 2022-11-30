@@ -32,7 +32,6 @@ public class DashboardFragment extends Fragment {
 
     private FragmentDashboardBinding binding;
     TextView police,women,domestic,ambulance,fire;
-    static int PERMISSION_CODE= 100;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         DashboardViewModel dashboardViewModel =
@@ -46,59 +45,38 @@ public class DashboardFragment extends Fragment {
         ambulance = root.findViewById(R.id.ambulance);
         fire = root.findViewById(R.id.fire);
         police.setOnClickListener(view ->{
-            if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
-                Intent callIntent = new Intent(Intent.ACTION_CALL);
-                callIntent.setData(Uri.parse("tel:" + "100"));
-                getActivity().startActivity(callIntent);
-            } else {
-                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CALL_PHONE},
-                        PERMISSION_CODE);
-            }
+//            Toast.makeText(getContext(), "User registered successfully", Toast.LENGTH_SHORT).show();
+            Intent callIntent = new Intent(Intent.ACTION_DIAL);
+            callIntent.setData(Uri.parse("tel:100"));
+            startActivity(callIntent);
 
         });
         women.setOnClickListener(view ->{
-            if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
-                Intent callIntent = new Intent(Intent.ACTION_CALL);
-                callIntent.setData(Uri.parse("tel:" + "1091"));
-                getActivity().startActivity(callIntent);
-            } else {
-                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CALL_PHONE},
-                        PERMISSION_CODE);
-            }
+//            Toast.makeText(getContext(), "User registered successfully", Toast.LENGTH_SHORT).show();
+            Intent callIntent = new Intent(Intent.ACTION_DIAL);
+            callIntent.setData(Uri.parse("tel:1091"));
+            startActivity(callIntent);
 
         });
         domestic.setOnClickListener(view ->{
-            if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
-                Intent callIntent = new Intent(Intent.ACTION_CALL);
-                callIntent.setData(Uri.parse("tel:" + "181"));
-                getActivity().startActivity(callIntent);
-            } else {
-                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CALL_PHONE},
-                        PERMISSION_CODE);
-            }
+//            Toast.makeText(getContext(), "User registered successfully", Toast.LENGTH_SHORT).show();
+            Intent callIntent = new Intent(Intent.ACTION_DIAL);
+            callIntent.setData(Uri.parse("tel:181"));
+            startActivity(callIntent);
 
         });
         ambulance.setOnClickListener(view ->{
-            if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
-                Intent callIntent = new Intent(Intent.ACTION_CALL);
-                callIntent.setData(Uri.parse("tel:" + "102"));
-                getActivity().startActivity(callIntent);
-            } else {
-                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CALL_PHONE},
-                        PERMISSION_CODE);
-            }
+//            Toast.makeText(getContext(), "User registered successfully", Toast.LENGTH_SHORT).show();
+            Intent callIntent = new Intent(Intent.ACTION_DIAL);
+            callIntent.setData(Uri.parse("tel:102"));
+            startActivity(callIntent);
 
         });
         fire.setOnClickListener(view ->{
-
-            if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
-                Intent callIntent = new Intent(Intent.ACTION_CALL);
-                callIntent.setData(Uri.parse("tel:" + "101"));
-                getActivity().startActivity(callIntent);
-            } else {
-                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CALL_PHONE},
-                        PERMISSION_CODE);
-            }
+//            Toast.makeText(getContext(), "User registered successfully", Toast.LENGTH_SHORT).show();
+            Intent callIntent = new Intent(Intent.ACTION_DIAL);
+            callIntent.setData(Uri.parse("tel:101"));
+            startActivity(callIntent);
 
         });
         //final TextView textView = binding.textDashboard;
