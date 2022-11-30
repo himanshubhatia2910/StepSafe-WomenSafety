@@ -42,7 +42,7 @@ public class HomeFragment extends Fragment {
     private LocationRequest locationRequest;
     private FragmentHomeBinding binding;
     Button shareLocation;
-    Switch toggleSwitch;
+    Switch toggleSwitch1;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -53,7 +53,7 @@ public class HomeFragment extends Fragment {
         View root = binding.getRoot();
         coordinates = root.findViewById(R.id.coordinates);
         shareLocation = root.findViewById(R.id.share);
-        toggleSwitch = root.findViewById(R.id.idSwitch);
+        toggleSwitch1 = root.findViewById(R.id.idSwitch);
         //////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -63,8 +63,8 @@ public class HomeFragment extends Fragment {
         locationRequest.setFastestInterval(2000);
 
 
-            toggleSwitch.setOnClickListener(view ->{
-                if(toggleSwitch.isChecked()){
+        toggleSwitch1.setOnClickListener(view ->{
+                if(toggleSwitch1.isChecked()){
                     getCurrentLocation();
                 }else {
                     Toast.makeText(getContext(),"Turn on the toggle switch",Toast.LENGTH_SHORT).show();
