@@ -1,5 +1,7 @@
 package com.example.stepsafe_womensafety.ui.home;
 
+import static android.content.Intent.getIntent;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -27,8 +29,6 @@ import com.google.firebase.database.ValueEventListener;
 public class HomeFragment extends Fragment {
     ImageView rImage;
     TextView username;
-    DatabaseReference databaseReference;
-    FirebaseDatabase firebaseDatabase;
 
     private FragmentHomeBinding binding;
 
@@ -36,19 +36,9 @@ public class HomeFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         HomeViewModel homeViewModel =
                 new ViewModelProvider(this).get(HomeViewModel.class);
-
-
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         username = root.findViewById(R.id.name);
-        firebaseDatabase = FirebaseDatabase.getInstance();
-
-        // below line is used to get
-        // reference for our database.
-        databaseReference = firebaseDatabase.getReference("Data");
-        getdata();
-
-
 
 
 
@@ -57,36 +47,8 @@ public class HomeFragment extends Fragment {
         return root;
 
 
-
     }
 
-    private void getdata() {
-        // calling add value event listener method
-        // for getting the values from database.
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                // this method is call to get the realtime
-                // updates in the data.
-                // this method is called when the data is
-                // changed in our Firebase console.
-                // below line is for getting the data from
-                // snapshot of our database.
-                String value = snapshot.getValue(String.class);
-
-                // after getting the value we are setting
-                // our value to our text view in below line.
-                username.setText(value);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                // calling on cancelled method when we receive
-                // any error or we are not able to get the data.
-                Toast.makeText(getContext(), "Fail to get data.", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
 
     @Override
     public void onDestroyView() {

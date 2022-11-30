@@ -118,6 +118,7 @@ public class Information extends AppCompatActivity {
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()){
                         Intent intent = new Intent(Information.this, Home.class);
+                        intent.putExtra("name",username);
                         Toast.makeText(Information.this, "Information Stored Successfully", Toast.LENGTH_SHORT).show();
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
