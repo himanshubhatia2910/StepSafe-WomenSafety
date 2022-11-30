@@ -16,6 +16,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.stepsafe_womensafety.Information;
@@ -39,11 +41,8 @@ public class HomeFragment extends Fragment {
         HomeViewModel homeViewModel =
                 new ViewModelProvider(this).get(HomeViewModel.class);
         binding = FragmentHomeBinding.inflate(inflater, container, false);
-//        Information activity = (Information) getActivity();
-//        assert activity != null;
-//        String myDataFromActivity = activity.getMyData();
         View root = binding.getRoot();
-        username = root.findViewById(R.id.name);
+
 //        username.setText(myDataFromActivity);
         return root;
 

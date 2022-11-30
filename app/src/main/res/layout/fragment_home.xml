@@ -34,6 +34,12 @@
     android:textColor="#6C63FF"
     android:fontFamily="@font/poppins_bold"
     android:gravity="center_horizontal"/>
+        <Switch
+            android:id="@+id/idSwitch"
 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_margin="10dp" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
