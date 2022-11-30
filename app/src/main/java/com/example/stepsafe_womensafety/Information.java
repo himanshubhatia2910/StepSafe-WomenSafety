@@ -2,8 +2,6 @@ package com.example.stepsafe_womensafety;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
@@ -11,11 +9,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-
-import com.example.stepsafe_womensafety.ui.home.HomeFragment;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import android.provider.MediaStore;
 import android.text.TextUtils;
@@ -80,9 +75,6 @@ public class Information extends AppCompatActivity {
         IVPreviewImage = findViewById(R.id.photo);
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        final HomeFragment myFragment = new HomeFragment();
         IVPreviewImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,11 +95,7 @@ public class Information extends AppCompatActivity {
             String user_height = height.getText().toString();
             String emergency_contact = emergency.getText().toString();
             String email = getIntent().getStringExtra("email");
-            //String password = getIntent().getStringExtra("password");
-//            FirebaseUser firebaseUser = mAuth.getCurrentUser();
-//            assert firebaseUser != null;
-//            String userid = firebaseUser.getUid();
-//            reference = FirebaseDatabase.getInstance().getReference("Users").child(userid);
+
             if(TextUtils.isEmpty(username) || TextUtils.isEmpty(phone) ||TextUtils.isEmpty(blood_group) ||TextUtils.isEmpty(user_age) ||
                     TextUtils.isEmpty(user_dob) ||TextUtils.isEmpty(user_weight) ||TextUtils.isEmpty(user_height) ||
                     TextUtils.isEmpty(emergency_contact)){
@@ -132,16 +120,13 @@ public class Information extends AppCompatActivity {
             hashMap.put("weight", user_weight);
             hashMap.put("height", user_height);
             hashMap.put("emergency_contact", emergency_contact);
-            reference.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if (task.isSuccessful()){
-                        Intent intent = new Intent(Information.this, Home.class);
-                        Toast.makeText(Information.this, "Information Stored Successfully", Toast.LENGTH_SHORT).show();
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
-                        finish();
-                    }
+            reference.setValue(hashMap).addOnCompleteListener(task -> {
+                if (task.isSuccessful()){
+                    Intent intent = new Intent(Information.this, Home.class);
+                    Toast.makeText(Information.this, "Information Stored Successfully", Toast.LENGTH_SHORT).show();
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    finish();
                 }
             });}
         });

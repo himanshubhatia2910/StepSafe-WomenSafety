@@ -61,9 +61,10 @@
                 android:background="@drawable/helpline"
                 android:fontFamily="@font/poppins_bold"
                 android:paddingLeft="10dp"
-                android:textColor="#6C63FF" />
+                android:textColor="#6C63FF"
+                android:gravity="center"/>
         <Button
-            android:id="@+id/save"
+            android:id="@+id/share"
             android:layout_width="295dp"
             android:layout_height="50dp"
             android:layout_below="@id/contact"
