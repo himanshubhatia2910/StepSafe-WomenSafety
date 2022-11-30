@@ -4,19 +4,28 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.EditText;
+import com.google.firebase.storage.StorageTask;
+import com.google.firebase.storage.UploadTask;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.stepsafe_womensafety.databinding.ActivityMainBinding;
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -27,6 +36,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
@@ -49,6 +59,7 @@ public class Information extends AppCompatActivity {
     private Uri selectedImageUri;
     FirebaseStorage storage;
     ActivityMainBinding binding;
+    private StorageTask uploadTask;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,6 +116,7 @@ public class Information extends AppCompatActivity {
             hashMap.put("id", userid);
             hashMap.put("email",email);
             //hashMap.put("password",password);
+                hashMap.put("imageURL","default");
             hashMap.put("name", username);
             hashMap.put("phone_number", phone);
             hashMap.put("blood_group", blood_group);
@@ -118,7 +130,6 @@ public class Information extends AppCompatActivity {
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()){
                         Intent intent = new Intent(Information.this, Home.class);
-                        intent.putExtra("name",username);
                         Toast.makeText(Information.this, "Information Stored Successfully", Toast.LENGTH_SHORT).show();
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
@@ -174,20 +185,25 @@ public class Information extends AppCompatActivity {
             }
         }
 
-
+    private String getFileExtension(Uri uri){
+        ContentResolver contentResolver = this.getContentResolver();
+        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+        return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
+    }
     private void uploadImage() {
         if (selectedImageUri != null) {
-            progressDialog = new ProgressDialog(this);
-            progressDialog.setTitle("Uploading File....");
-            progressDialog.show();
-
+//            progressDialog = new ProgressDialog(this);
+//            progressDialog.setTitle("Uploading File....");
+//            progressDialog.show();
+            final  StorageReference fileReference = storageReference.child(System.currentTimeMillis()
+                    +"."+getFileExtension(selectedImageUri));
 //            SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss", Locale.CANADA);
 //            Date now = new Date();
 //            String fileName = formatter.format(now);
             StorageReference ref = storageReference.child("images/" + UUID.randomUUID() + toString());
 
-
-            ref.putFile(selectedImageUri)
+            uploadTask = fileReference.putFile(selectedImageUri);
+           // ref.putFile(selectedImageUri)
 //                .addOnSuccessListener(taskSnapshot -> {
 //
 //
@@ -199,12 +215,37 @@ public class Information extends AppCompatActivity {
 //                        progressDialog.dismiss();
 //
 //                })
-                    .addOnSuccessListener(taskSnapshot -> {
-                        //IVPreviewImage.setImageURI(selectedImageUri);
-                        progressDialog.dismiss();
-                        Toast.makeText(Information.this, "Uploaded", Toast.LENGTH_SHORT).show();
+            uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                        @Override
+                        public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                            if (!task.isSuccessful()){
+                                throw  task.getException();
+                            }
+
+                            return  fileReference.getDownloadUrl();
+                        }
                     })
-                    .addOnFailureListener(e -> {
+                    .addOnCompleteListener(new OnCompleteListener<Uri>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Uri> task) {
+                            if (task.isSuccessful()){
+                                Uri downloadUri = task.getResult();
+                                String mUri = downloadUri.toString();
+
+                                mAuth = FirebaseAuth.getInstance();
+                                FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                                assert firebaseUser != null;
+                                String userid = firebaseUser.getUid();
+                                reference = FirebaseDatabase.getInstance().getReference("Users").child(userid);
+                                HashMap<String, Object> map = new HashMap<>();
+                                map.put("imageURL", ""+mUri);
+                                reference.updateChildren(map);
+                            } else {
+                                Toast.makeText(Information.this, "Failed!", Toast.LENGTH_SHORT).show();
+                            }
+                            Toast.makeText(Information.this, "Uploaded Successfully!", Toast.LENGTH_SHORT).show();
+                        }
+                    }).addOnFailureListener(e -> {
 
 
                         if (progressDialog.isShowing())
