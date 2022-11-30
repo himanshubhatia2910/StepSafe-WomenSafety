@@ -208,6 +208,79 @@ AT+CCLK?
 The time is zero time zone time, at 2:50:55 on October 7, 2017.
 +08 is the time zone, we are here in Dongba District, so the local time is 10:50:55 `OK`
 
+## ====== HTTP REQUEST ======
+
+`AT+HTTPGET=<url>` Uniform resource identifier, which can be a domain name or IP address <br>
+`AT+HTTPPOST=<url>,<content_type>,<body_content> <content_type>` : network file type and web page encoding content type `<body_content>:` body text <br>
+Example 
+`AT+CGATT=1` Attach to the network, if you need to go online, this command is required
+
+```
++CGATT:1 OK
+```
+
+`AT+CGDCONT=1,“IP”,“CMNET”` Set PDP parameters
+
+```
+OK
+```
+
+`AT+CGACT=1,1` Activate PDP, you can go online after it is activated correctly <br>
+
+```
+OK
+```
+
+`AT+HTTPGET=“http://www.google.com”` Connect to the website and request website resources
+
+```
+OK
+```
+
+The next message received is the response from the server
+
+## ===== MQTT =====
+
+Example: `AT+CGATT=1` Attach to the network
+
+```
+OK
+```
+
+`AT+CGDCONT=1,"IP","CMNET"` //Set PDP parameters
+
+```
+OK
+```
+
+`AT+CGACT=1,1` //Activate the PDP, you can go online after the correct activation
+
+```
+OK
+```
+
+`AT+MQTTCONN="www.anthinkerwx.com",1883,"12345",120,0,"Ai-thinker","123456"` //The client waits and connects to the server, and sends CONNECT at the same time
+
+```
+OK
+```
+
+// Note: (MQTT server needs to be built by yourself)
+`AT+MQTTPUB="test","124563",0,0,0` //The client transmits an application message to the server
+
+```
++MQTTPUBLISH: 1, test, 6, 124563
+OK
+```
+
+`AT+MQTTSUB="test",1,0` //The client sends a SUB message to the server to create a subscription
+
+```
+OK
+```
+
+`AT+MQTTDISCONN` //The DISCONNECT control message sent by the client to the server indicates that the client is normally disconnected
+
 ## ====== GPS Settings ======
 
 Related instructions `AT+GPS=1`, turn on GPS <br>
@@ -294,12 +367,14 @@ Some one time configs:<br>
 `AT+CSMP=17,167,0,0` : ??? <br>
 
 ### Errors
-`500` : CTRL + Z not send and unknown error<br>
-`58`  : Unknown command <br>
-`52`  : GPS not Fixed <br>
 
-`+CMGS: n`  : SMS has been sent.
+`500` : CTRL + Z not send and unknown error<br>
+`58` : Unknown command <br>
+`52` : GPS not Fixed <br>
+
+`+CMGS: n` : SMS has been sent.
 `+CIEV: "SMSFULL",2` : Inbox is full.
+
 # TO DO
 
 -   [x] Shift to ESP32. As it may have more than 1 hardware serial ports
@@ -307,8 +382,13 @@ Some one time configs:<br>
 -   [x] Send SMS on button press
 -   [x] Send SMS to multiple devices [git](https://github.com/ahmadlogs/nodemcu/blob/main/sim800l-gps-reg-phone/sim800l-gps-reg-phone.ino)
 -   [x] Receive call always
--   [ ] Low Power mode
+-   [x] Send GPS to Firebase
 -   [ ] SetUp - customize emergency contacts.
--   [ ] Geo Fencing [YT](https://www.youtube.com/watch?v=mpeNx7yEh6w&list=PLZrkZsU6meXO1OAi0osYRJphg27jeUsc3&index=8)
+-   [ ] LED Indicator
+-   [x] Send SMS only if location changes
+-   [ ] if location not fetched, keep fetching
+-   [ ] Delete received SMS
+-   [ ] Setup safe show removal
+-   [ ] sms IS NOT BEING SENT AGAIN
+PLEASE CHECK
 
-![this]()

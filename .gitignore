@@ -13,3 +13,5 @@
 .externalNativeBuild
 .cxx
 local.properties
+Arduino/SMSControlFromNodeMCU/secrets.h
+StepSafe-WomenSafety/ArduinoOutput
