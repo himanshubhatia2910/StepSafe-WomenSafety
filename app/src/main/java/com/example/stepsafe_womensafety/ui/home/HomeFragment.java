@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.stepsafe_womensafety.databinding.FragmentHomeBinding;
 public class HomeFragment extends Fragment {
+    ImageView rImage;
 
     private FragmentHomeBinding binding;
 
@@ -27,6 +28,9 @@ public class HomeFragment extends Fragment {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         return root;
+
+
+
     }
 
     @Override
