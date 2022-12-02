@@ -47,11 +47,10 @@ public class Login extends AppCompatActivity {
         tvRegisterHere = findViewById(R.id.signUp);
         btnLogin = findViewById(R.id.login);
         forgot_password = findViewById(R.id.forgot);
-        sp = getSharedPreferences("login",MODE_PRIVATE);
-        if(sp.getBoolean("logged",false)){
-            Intent i = new Intent(this,Home.class);
-            startActivity(i);
-        }
+//        sp = getSharedPreferences("login",MODE_PRIVATE);
+//        if(sp.getBoolean("logged",true)){
+//            func();
+//        }
         ShowHidePass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -96,7 +95,10 @@ public class Login extends AppCompatActivity {
             }
         });
         btnLogin.setOnClickListener(view -> {
+//            func();
+//            sp.edit().putBoolean("logged",false).apply();
             loginUser();
+
         });
         tvRegisterHere.setOnClickListener(view -> {
             startActivity(new Intent(Login.this, CreateAccount.class));
@@ -122,7 +124,6 @@ public class Login extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         Toast.makeText(Login.this, "User logged in successfully", Toast.LENGTH_SHORT).show();
                         Intent i= new Intent(Login.this, Home.class);
-                        sp.edit().putBoolean("logged",true).apply();
                         i.putExtra("email",email);
                         i.putExtra("password",password);
                         startActivity(i);
@@ -135,5 +136,9 @@ public class Login extends AppCompatActivity {
         }
 
     }
+//    public void func(){
+//            Intent i = new Intent(this,Home.class);
+//            startActivity(i);
+//        }
 }
 
