@@ -24,26 +24,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.stepsafe_womensafety.databinding.ActivityMainBinding;
-import com.google.android.gms.tasks.Continuation;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.StorageTask;
-import com.google.firebase.storage.UploadTask;
+
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+
 import java.util.HashMap;
-import java.util.Locale;
-import java.util.Objects;
+
 import java.util.UUID;
 
 public class Information extends AppCompatActivity {
@@ -75,16 +68,7 @@ public class Information extends AppCompatActivity {
         IVPreviewImage = findViewById(R.id.photo);
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
-        IVPreviewImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                imageChooser();
-            }
-
-
-
-
-        });
+        IVPreviewImage.setOnClickListener(v -> imageChooser());
         save.setOnClickListener(view ->{
             String username = name.getText().toString();
             String phone = contact.getText().toString();

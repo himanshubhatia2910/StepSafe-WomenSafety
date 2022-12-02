@@ -1,15 +1,26 @@
 package com.example.stepsafe_womensafety.ui.home;
 
+import static android.content.Context.SENSOR_SERVICE;
+
+import static androidx.core.content.ContextCompat.*;
+
 import android.Manifest;
 import android.app.Activity;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
+import android.telephony.SmsManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,8 +33,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+
+import com.example.stepsafe_womensafety.MainActivity;
 import com.example.stepsafe_womensafety.R;
 import com.example.stepsafe_womensafety.databinding.FragmentHomeBinding;
 import com.example.stepsafe_womensafety.ui.Users;
@@ -48,11 +62,15 @@ import com.google.firebase.database.ValueEventListener;
 
 public class HomeFragment extends Fragment {
     ImageView photo;
+    public static final String SENSOR_SERVICE = "sensor";
     TextView coordinates,username;
     private LocationRequest locationRequest;
     private FragmentHomeBinding binding;
     Button shareLocation;
+    boolean flag = false;
+    Context cont = getContext();
     Switch toggleSwitch;
+    static int PERMISSION_CODE= 100;
     DatabaseReference reference;
     FirebaseUser fuser;
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -113,11 +131,79 @@ public class HomeFragment extends Fragment {
                     coordinates.setText(" ");
                     shareLocation.setEnabled(false);
                 }
+                if(toggleSwitch.isChecked()){
+                    shakeAlert();
+                }
             });
 
 
         return root;
 
+    }
+
+    private void shakeAlert() {
+        if (ContextCompat.checkSelfPermission(getActivity(),Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED){
+
+            ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.CALL_PHONE},PERMISSION_CODE);
+        }
+
+
+        Context cont;
+        cont=getActivity();
+        SensorManager sensorManager = (SensorManager) cont.getSystemService(Context.SENSOR_SERVICE);
+        Sensor sensorShake = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        SensorEventListener sensorEventListener = new SensorEventListener() {
+            @Override
+            public void onSensorChanged(SensorEvent sensorEvent) {
+                if (sensorEvent!=null){
+                    float x_accl = sensorEvent.values[0];
+                    float y_accl = sensorEvent.values[1];
+                    float z_accl = sensorEvent.values[2];
+
+                    float floatSum = Math.abs(x_accl) + Math.abs(y_accl) + Math.abs(z_accl);
+                    flag=true;
+
+
+                    if (floatSum > 30){
+                        //textView.setText("Yes, Shaking");
+                        String phoneno = "7887575773";
+                        String msg = "Test Shake Message";
+                        flag=true;
+                        //message not working but call working
+                        try {
+                            SmsManager sms = SmsManager.getDefault();
+                            PendingIntent sentPI;
+                            String SENT = "SMS_SENT";
+
+                            sentPI = PendingIntent.getBroadcast(getContext(), 0,new Intent(SENT), 0);
+
+                            sms.sendTextMessage(phoneno, null, msg, sentPI, null);
+
+
+
+
+//                            SmsManager smsManager=SmsManager.getDefault();
+//                            smsManager.sendTextMessage(phoneno,null,msg,null,null);
+                            Toast.makeText(getContext(),"Message Sent",Toast.LENGTH_LONG).show();
+                        }catch (Exception e)
+                        {
+                            Toast.makeText(getContext(),e.getLocalizedMessage(),Toast.LENGTH_LONG).show();
+                            Log.d("tag",e.getLocalizedMessage());
+                        }
+//
+
+                    }
+                    else {
+                        //textView.setText("No, NOT Shaking");
+                    }
+                }
+            }
+
+            @Override
+            public void onAccuracyChanged(Sensor sensor, int i) {
+            }
+        };
+        sensorManager.registerListener(sensorEventListener, sensorShake, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     @Override
@@ -241,7 +327,7 @@ public class HomeFragment extends Fragment {
         boolean isEnabled;
 
         if (locationManager == null) {
-            Context cont = getContext();
+
             assert cont != null;///failing here mostly
             locationManager = (LocationManager) cont.getSystemService(Context.LOCATION_SERVICE);
         }
