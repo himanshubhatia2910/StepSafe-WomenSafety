@@ -131,9 +131,9 @@ public class HomeFragment extends Fragment {
                     coordinates.setText(" ");
                     shareLocation.setEnabled(false);
                 }
-                if(toggleSwitch.isChecked()){
-                    shakeAlert();
-                }
+//                if(toggleSwitch.isChecked()){
+//                    shakeAlert();
+//                }
             });
 
 
@@ -148,9 +148,8 @@ public class HomeFragment extends Fragment {
         }
 
 
-        Context cont;
-        cont=getActivity();
-        SensorManager sensorManager = (SensorManager) cont.getSystemService(Context.SENSOR_SERVICE);
+
+        SensorManager sensorManager = (SensorManager) getContext().getSystemService(Context.SENSOR_SERVICE);
         Sensor sensorShake = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         SensorEventListener sensorEventListener = new SensorEventListener() {
             @Override
@@ -174,13 +173,8 @@ public class HomeFragment extends Fragment {
                             SmsManager sms = SmsManager.getDefault();
                             PendingIntent sentPI;
                             String SENT = "SMS_SENT";
-
                             sentPI = PendingIntent.getBroadcast(getContext(), 0,new Intent(SENT), 0);
-
                             sms.sendTextMessage(phoneno, null, msg, sentPI, null);
-
-
-
 
 //                            SmsManager smsManager=SmsManager.getDefault();
 //                            smsManager.sendTextMessage(phoneno,null,msg,null,null);
@@ -193,9 +187,7 @@ public class HomeFragment extends Fragment {
 //
 
                     }
-                    else {
-                        //textView.setText("No, NOT Shaking");
-                    }
+
                 }
             }
 
@@ -326,11 +318,8 @@ public class HomeFragment extends Fragment {
         LocationManager locationManager = null;
         boolean isEnabled;
 
-        if (locationManager == null) {
-
-            assert cont != null;///failing here mostly
-            locationManager = (LocationManager) cont.getSystemService(Context.LOCATION_SERVICE);
-        }
+       // assert cont != null;///failing here mostly
+        locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
 
         isEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
         return isEnabled;
