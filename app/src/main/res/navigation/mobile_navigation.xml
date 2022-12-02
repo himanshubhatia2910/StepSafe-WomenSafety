@@ -22,4 +22,9 @@
         android:name="com.example.stepsafe_womensafety.ui.notifications.NotificationsFragment"
         android:label="Add Contacts"
         tools:layout="@layout/fragment_notifications" />
+    <fragment
+        android:id="@+id/navigation_view_contacts"
+        android:name="com.example.stepsafe_womensafety.ui.main.ViewContactsFragment"
+        android:label="View Contacts"
+        tools:layout="@layout/fragment_main" />
 </navigation>

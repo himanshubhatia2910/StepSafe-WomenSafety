@@ -4,20 +4,95 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F0F4F3"
     tools:context=".ui.home.HomeFragment">
 
-    <TextView
-        android:id="@+id/text_home"
+    <LinearLayout
+        android:id="@+id/linear1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_height="match_parent"
+        android:background="#F0F4F3"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        tools:layout_editor_absoluteY="0dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/photo"
+            android:layout_width="190dp"
+            android:layout_height="140dp"
+            android:src="@drawable/ic_group_13__1_"
+            app:civ_border_color="#F0F4F3"
+            app:civ_border_width="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:fontFamily="@font/poppins_bold"
+            android:gravity="center_horizontal"
+            android:text="Username"
+            android:textAlignment="center"
+            android:textColor="#6C63FF"
+            android:textSize="18sp" />
+
+        <Switch
+            android:id="@+id/idSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/poppins_bold"
+            android:text="Live Location"
+            android:textColor="#6C63FF"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:thumbTint="@color/blue"
+            app:trackTint="@color/purple_700" />
+
+        <TextView
+            android:id="@+id/coordinates"
+            android:layout_width="295dp"
+            android:layout_height="75dp"
+            android:layout_below="@id/num"
+            android:layout_marginTop="25dp"
+            android:background="@drawable/helpline"
+            android:fontFamily="@font/poppins_bold"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:textColor="#6C63FF" />
+
+        <Button
+            android:id="@+id/share"
+            android:layout_width="295dp"
+            android:layout_height="50dp"
+            android:layout_below="@id/contact"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/login_button"
+            android:text="Share Location" />
+
+        <ImageView
+            android:layout_marginTop="30dp"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:src="@drawable/shake"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="Shake your device to send an emergency alert"
+            android:gravity="center_horizontal"
+            android:textColor="#6C63FF"
+            android:textStyle="bold"
+
+            />
+
+
+
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

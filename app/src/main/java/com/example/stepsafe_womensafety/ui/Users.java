@@ -7,7 +7,7 @@ public class Users {
     public Users() {
     }
 
-    public Users(String email,String password, String name, String blood_group, String dob, int phone_number, int age, int height, int weight, int emergency_contact) {
+    public Users(String email,String imageUrl ,String password, String name, String blood_group, String dob, int phone_number, int age, int height, int weight, int emergency_contact) {
         this.email = email;
         this.password=password;
         this.name = name;
@@ -17,6 +17,7 @@ public class Users {
         this.age = age;
         this.height = height;
         this.weight = weight;
+        this.imageUrl =imageUrl;
         this.emergency_contact = emergency_contact;
     }
 

@@ -11,7 +11,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import android.provider.MediaStore;
 import android.text.TextUtils;
@@ -25,26 +24,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.stepsafe_womensafety.databinding.ActivityMainBinding;
-import com.google.android.gms.tasks.Continuation;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.StorageTask;
-import com.google.firebase.storage.UploadTask;
+
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+
 import java.util.HashMap;
-import java.util.Locale;
-import java.util.Objects;
+
 import java.util.UUID;
 
 public class Information extends AppCompatActivity {
@@ -76,16 +68,7 @@ public class Information extends AppCompatActivity {
         IVPreviewImage = findViewById(R.id.photo);
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
-        IVPreviewImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                imageChooser();
-            }
-
-
-
-
-        });
+        IVPreviewImage.setOnClickListener(v -> imageChooser());
         save.setOnClickListener(view ->{
             String username = name.getText().toString();
             String phone = contact.getText().toString();
@@ -96,11 +79,7 @@ public class Information extends AppCompatActivity {
             String user_height = height.getText().toString();
             String emergency_contact = emergency.getText().toString();
             String email = getIntent().getStringExtra("email");
-            //String password = getIntent().getStringExtra("password");
-//            FirebaseUser firebaseUser = mAuth.getCurrentUser();
-//            assert firebaseUser != null;
-//            String userid = firebaseUser.getUid();
-//            reference = FirebaseDatabase.getInstance().getReference("Users").child(userid);
+
             if(TextUtils.isEmpty(username) || TextUtils.isEmpty(phone) ||TextUtils.isEmpty(blood_group) ||TextUtils.isEmpty(user_age) ||
                     TextUtils.isEmpty(user_dob) ||TextUtils.isEmpty(user_weight) ||TextUtils.isEmpty(user_height) ||
                     TextUtils.isEmpty(emergency_contact)){
@@ -116,7 +95,7 @@ public class Information extends AppCompatActivity {
             hashMap.put("id", userid);
             hashMap.put("email",email);
             //hashMap.put("password",password);
-                hashMap.put("imageUrl","default");
+                hashMap.put("imageURL","default");
             hashMap.put("name", username);
             hashMap.put("phone_number", phone);
             hashMap.put("blood_group", blood_group);
@@ -125,16 +104,13 @@ public class Information extends AppCompatActivity {
             hashMap.put("weight", user_weight);
             hashMap.put("height", user_height);
             hashMap.put("emergency_contact", emergency_contact);
-            reference.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if (task.isSuccessful()){
-                        Intent intent = new Intent(Information.this, Home.class);
-                        Toast.makeText(Information.this, "Information Stored Successfully", Toast.LENGTH_SHORT).show();
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
-                        finish();
-                    }
+            reference.setValue(hashMap).addOnCompleteListener(task -> {
+                if (task.isSuccessful()){
+                    Intent intent = new Intent(Information.this, Home.class);
+                    Toast.makeText(Information.this, "Information Stored Successfully", Toast.LENGTH_SHORT).show();
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    finish();
                 }
             });}
         });
