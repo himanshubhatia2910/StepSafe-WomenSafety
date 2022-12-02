@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
@@ -32,7 +33,7 @@ public class Login extends AppCompatActivity {
     TextView btnLogin;
     TextView forgot_password;
     FirebaseAuth mAuth;
-
+    SharedPreferences sp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +47,11 @@ public class Login extends AppCompatActivity {
         tvRegisterHere = findViewById(R.id.signUp);
         btnLogin = findViewById(R.id.login);
         forgot_password = findViewById(R.id.forgot);
+        sp = getSharedPreferences("login",MODE_PRIVATE);
+        if(sp.getBoolean("logged",false)){
+            Intent i = new Intent(this,Home.class);
+            startActivity(i);
+        }
         ShowHidePass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -63,6 +69,7 @@ public class Login extends AppCompatActivity {
                 }
             }
         });
+
         SignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -115,6 +122,7 @@ public class Login extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         Toast.makeText(Login.this, "User logged in successfully", Toast.LENGTH_SHORT).show();
                         Intent i= new Intent(Login.this, Home.class);
+                        sp.edit().putBoolean("logged",true).apply();
                         i.putExtra("email",email);
                         i.putExtra("password",password);
                         startActivity(i);
