@@ -11,3 +11,5 @@
 /* 4. Define the user Email and password that alreadey registerd or added in your project */
 #define USER_EMAIL "amey.dhuri21@vit.edu"
 #define USER_PASSWORD "qwerty12345"
+
+#define DATABASE_URL "https://stepsafe-81b78-default-rtdb.firebaseio.com" //<databaseName>.firebaseio.com or <databaseName>.<region>.firebasedatabase.app

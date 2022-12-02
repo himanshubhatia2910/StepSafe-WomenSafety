@@ -28,6 +28,7 @@ unsigned long triggertime;
 unsigned long dataMillis = 0;
 unsigned long lastsmsmillis = 0;
 int alertDelay = 60000; // 3600000 hourly
+unsigned long sendDataPrevMillis = 0;
 
 // ------------------------------------------------------------
 #include <Firebase_ESP_Client.h>
@@ -38,13 +39,13 @@ FirebaseAuth auth;
 FirebaseConfig config;
 // ------------------------------------------------------------
 
-#line 39 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
+#line 40 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
 void setup();
-#line 60 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
+#line 61 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
 void loop();
-#line 76 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
+#line 77 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
 void checktriggered();
-#line 108 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
+#line 109 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
 void getGPS();
 #line 209 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
 void noparseupdate();
@@ -64,13 +65,15 @@ void setupA9G();
 void parseData(String replyfromA9G);
 #line 379 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
 String getTime();
-#line 408 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
+#line 407 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
 void fcsUploadCallback(CFS_UploadStatusInfo info);
-#line 432 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
+#line 431 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
 void firebaseSetup();
-#line 449 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
+#line 459 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
+boolean fetchEmergencyContact();
+#line 486 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
 void firebaseSend(String currenttime, String latitude, String longitude);
-#line 39 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
+#line 40 "d:\\StepSafe\\StepSafe-WomenSafety\\Arduino\\SMSControlFromNodeMCU\\SMSControlFromNodeMCU.ino"
 void setup()
 {
   Serial.begin(115200);
@@ -174,11 +177,10 @@ void getGPS()
     Serial.println((String)latitude + (String)longitude);
   }
   alertSMS(latitude, longitude);
-  // TODO firebase send function
   temp = latitude + "," + longitude;
   if (!temp.equals(lastcoordinates))
   {
-    Serial.println("Co-Ordinates didnot change!");
+    Serial.println("Co-Ordinates changed!");
     firebaseSend(getTime(), latitude, longitude);
   }
   gpscall = false;
@@ -413,7 +415,6 @@ void parseData(String replyfromA9G)
 //---------------------------------------------------------
 String getTime()
 {
-  //  TODO check this
   String currenttime = "", replyfromA9G;
   noparseupdate();
   Serial2.println("AT+CCLK?");
@@ -426,7 +427,7 @@ String getTime()
   replyfromA9G.trim();
   if (replyfromA9G.indexOf("+CCLK:") >= 0)
   {
-    currenttime=replyfromA9G;
+    currenttime = replyfromA9G;
     int index = currenttime.indexOf(":");
     currenttime.remove(0, index + 1);
     currenttime.remove(0, currenttime.indexOf('"') + 1);
@@ -467,18 +468,56 @@ void fcsUploadCallback(CFS_UploadStatusInfo info)
 void firebaseSetup()
 {
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-  //  while (WiFi.status() != WL_CONNECTED)
-  //  {
-  //    Serial.print(".");
-  //    wait(300);
-  //  }
+  while (WiFi.status() != WL_CONNECTED)
+  {
+    Serial.print(".");
+    wait(300);
+  }
   config.api_key = API_KEY;
   auth.user.email = USER_EMAIL;
   auth.user.password = USER_PASSWORD;
+  config.database_url = DATABASE_URL;
   config.token_status_callback = tokenStatusCallback; // see addons/TokenHelper.h
   fbdo.setResponseSize(2048);
   Firebase.begin(&config, &auth);
   Firebase.reconnectWiFi(true);
+  config.timeout.serverResponse = 10 * 1000;
+  // Firebase.setDoubleDigits(5);
+  while (true)
+  {
+    if (fetchEmergencyContact())
+      break;
+    else
+      Serial.println("~");
+  }
+}
+
+// TODO fetch emergency contacts
+boolean fetchEmergencyContact()
+{
+  if (Firebase.ready() && (millis() - sendDataPrevMillis > 15000 || sendDataPrevMillis == 0))
+  {
+    sendDataPrevMillis = millis();
+    Serial.printf("Get string... %s\n", Firebase.RTDB.getString(&fbdo, F("/test/string")) ? fbdo.to<const char *>() : fbdo.errorReason().c_str());
+
+    if (Firebase.RTDB.getString(&fbdo, F("/Users/7a5Jza5gO3bB4OBP0rAMRzfCXJB3/emergency_contact")))
+    {
+      String fetchedcontacts = fbdo.to<const char *>();
+      if (senderNumber.indexOf(fetchedcontacts) == -1)
+      {
+        senderNumber.concat("+91" + fetchedcontacts + ",");
+        Serial.println(senderNumber);
+        return true;
+      }
+      else
+      {
+        Serial.println("Contact already in list!");
+      }
+    }
+    else
+      Serial.println(fbdo.errorReason().c_str());
+  }
+  return false;
 }
 
 void firebaseSend(String currenttime, String latitude, String longitude)

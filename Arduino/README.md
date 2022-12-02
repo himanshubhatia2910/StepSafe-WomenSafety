@@ -388,7 +388,5 @@ Some one time configs:<br>
 -   [x] Send SMS only if location changes
 -   [ ] if location not fetched, keep fetching
 -   [ ] Delete received SMS
--   [ ] Setup safe show removal
--   [ ] sms IS NOT BEING SENT AGAIN
-PLEASE CHECK
+-   [x] Setup safe show removal
 
