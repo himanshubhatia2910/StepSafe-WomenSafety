@@ -14,14 +14,14 @@
         android:id="@+id/navigation_notifications"
         android:icon="@drawable/ic_baseline_person_add_24"
         android:title="Add Contact" />
-    <item
-        android:id="@+id/contacts"
-        android:icon="@drawable/ic_baseline_contacts_24"
-        android:title="Contacts" />
-    <item
-        android:id="@+id/more"
-        android:icon="@drawable/ic_baseline_more_vert_24"
-        android:title="More" />
+<!--    <item-->
+<!--        android:id="@+id/contacts"-->
+<!--        android:icon="@drawable/ic_baseline_contacts_24"-->
+<!--        android:title="Contacts" />-->
+<!--    <item-->
+<!--        android:id="@+id/more"-->
+<!--        android:icon="@drawable/ic_baseline_more_vert_24"-->
+<!--        android:title="More" />-->
 <!--    <item-->
 <!--        android:id="@+id/navigation_dashboard"-->
 <!--        android:icon="@drawable/ic_dashboard_black_24dp"-->

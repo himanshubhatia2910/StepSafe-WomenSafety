@@ -118,12 +118,14 @@ public class Login extends AppCompatActivity {
                         i.putExtra("email",email);
                         i.putExtra("password",password);
                         startActivity(i);
+                        finish();
                     } else {
                         Toast.makeText(Login.this, "Log in Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }
             });
         }
+
     }
 }
 
