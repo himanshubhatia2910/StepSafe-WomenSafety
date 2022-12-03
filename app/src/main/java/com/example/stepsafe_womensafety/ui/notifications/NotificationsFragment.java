@@ -51,23 +51,27 @@ public class NotificationsFragment extends Fragment {
             if(TextUtils.isEmpty(user) || TextUtils.isEmpty(contact_no)){
                 Toast.makeText(getContext(), "Please Enter all the Fields", Toast.LENGTH_SHORT).show();
             }
-            mAuth = FirebaseAuth.getInstance();
-            FirebaseUser firebaseUser = mAuth.getCurrentUser();
-            assert firebaseUser != null;
-            String userid = firebaseUser.getUid();
-            reference = FirebaseDatabase.getInstance().getReference("Users").child(userid).push();
-            HashMap<String, String> hashMap = new HashMap<>();
-            hashMap.put("id", userid);
-            hashMap.put("emergency_contact_new",contact_no);
-            hashMap.put("contact_name",user);
-            reference.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if (task.isSuccessful()){
-                        Toast.makeText(getContext(), "Information Stored Successfully", Toast.LENGTH_SHORT).show();
+            else {
+                mAuth = FirebaseAuth.getInstance();
+                FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                assert firebaseUser != null;
+                String userid = firebaseUser.getUid();
+                reference = FirebaseDatabase.getInstance().getReference("Users").child(userid).push();
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("id", userid);
+                hashMap.put("emergency_contact_new", contact_no);
+                hashMap.put("contact_name", user);
+                reference.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(getContext(), "Information Stored Successfully", Toast.LENGTH_SHORT).show();
+                            name.setText("");
+                            contact.setText("");
+                        }
                     }
-                }
-            });
+                });
+            }
         });
         //final TextView textView = binding.textNotifications;
         //notificationsViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);

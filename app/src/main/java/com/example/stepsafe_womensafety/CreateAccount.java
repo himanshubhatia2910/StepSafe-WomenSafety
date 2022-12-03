@@ -113,9 +113,9 @@ public class CreateAccount extends AppCompatActivity {
                         Toast.makeText(CreateAccount.this, "User registered successfully", Toast.LENGTH_SHORT).show();
                         Intent i= new Intent(CreateAccount.this, Information.class);
                         i.putExtra("email",email);
-                        //i.putExtra("password",password);
-
+                        //i.putExtra("password",password)
                        startActivity(i);
+                       finish();
                     }else{
                         Toast.makeText(CreateAccount.this, "Registration Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     }
