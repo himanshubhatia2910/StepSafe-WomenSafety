@@ -14,13 +14,10 @@
         android:orientation="vertical">
 
 
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_group_10" />
-
-
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_group_10" />
 
 
         <RelativeLayout
@@ -40,6 +37,7 @@
                 android:layout_centerHorizontal="true"
                 android:background="@drawable/logincomp"
                 android:drawableStart="@drawable/ic_group_11"
+                android:drawableLeft="@drawable/ic_group_11"
                 android:drawablePadding="5dp"
                 android:fontFamily="@font/poppins"
                 android:hint="Email"
@@ -70,6 +68,7 @@
                     android:layout_marginTop="10dp"
                     android:background="@drawable/logincomp"
                     android:drawableStart="@drawable/ic_group_12"
+                    android:drawableLeft="@drawable/ic_group_12"
                     android:drawablePadding="5dp"
                     android:fontFamily="@font/poppins"
                     android:hint="Password"
