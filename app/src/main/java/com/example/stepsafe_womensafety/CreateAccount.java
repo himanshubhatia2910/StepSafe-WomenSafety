@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -66,7 +67,7 @@ public class CreateAccount extends AppCompatActivity {
         });
 
         tvLoginHere.setOnClickListener(view ->{
-            startActivity(new Intent(CreateAccount.this, Information.class));
+            startActivity(new Intent(CreateAccount.this, Login.class));
         });
     }
 
@@ -110,7 +111,7 @@ public class CreateAccount extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()){
                         Toast.makeText(CreateAccount.this, "User registered successfully", Toast.LENGTH_SHORT).show();
-                        Intent i= new Intent(CreateAccount.this, Login.class);
+                        Intent i= new Intent(CreateAccount.this, Information.class);
                         i.putExtra("email",email);
                         //i.putExtra("password",password);
 
