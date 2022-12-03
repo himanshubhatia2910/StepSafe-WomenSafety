@@ -22,6 +22,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class Login extends AppCompatActivity {
     ImageView ShowHidePass;
@@ -33,7 +34,6 @@ public class Login extends AppCompatActivity {
     TextView btnLogin;
     TextView forgot_password;
     FirebaseAuth mAuth;
-    SharedPreferences sp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,10 +47,6 @@ public class Login extends AppCompatActivity {
         tvRegisterHere = findViewById(R.id.signUp);
         btnLogin = findViewById(R.id.login);
         forgot_password = findViewById(R.id.forgot);
-//        sp = getSharedPreferences("login",MODE_PRIVATE);
-//        if(sp.getBoolean("logged",true)){
-//            func();
-//        }
         ShowHidePass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -96,7 +92,7 @@ public class Login extends AppCompatActivity {
         });
         btnLogin.setOnClickListener(view -> {
 //            func();
-//            sp.edit().putBoolean("logged",false).apply();
+//            sp.edit().putBoolean("logged",true).apply();
             loginUser();
 
         });
@@ -124,8 +120,6 @@ public class Login extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         Toast.makeText(Login.this, "User logged in successfully", Toast.LENGTH_SHORT).show();
                         Intent i= new Intent(Login.this, Home.class);
-                        i.putExtra("email",email);
-                        i.putExtra("password",password);
                         startActivity(i);
                         finish();
                     } else {
@@ -136,9 +130,5 @@ public class Login extends AppCompatActivity {
         }
 
     }
-//    public void func(){
-//            Intent i = new Intent(this,Home.class);
-//            startActivity(i);
-//        }
 }
 
