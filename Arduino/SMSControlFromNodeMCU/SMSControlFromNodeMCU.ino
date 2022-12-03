@@ -22,6 +22,7 @@ String senderNumber = "+919372391056,";
 int lastTriggerButtonState = LOW;
 int lastSafeButtonState = LOW;
 boolean unsafeFlag = false;
+boolean shoeWorn = false;
 unsigned long triggertime;
 unsigned long dataMillis = 0;
 unsigned long lastsmsmillis = 0;
@@ -52,21 +53,21 @@ void setup()
   pinMode(TRIGGER_BUTTON, INPUT);
   pinMode(SAFE_BUTTON, INPUT);
   // ---------------------------------------------------
-  powerOn();
-  setupA9G();
-  firebaseSetup();
+  // powerOn();
+  // setupA9G();
+  // firebaseSetup();
 }
 
 // NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
 void loop()
 {
   checktriggered();
-  if (unsafe == true && ((millis() - lastsmsmillis) > alertDelay || lastsmsmillis == 0))
-  {
-    getGPS();
-    Serial.println("~~~~~~~~~~~~~~~~~~~~~~End loop~~~~~~~~~~~~~~~~~~~~~~~~~~");
-    lastsmsmillis = millis();
-  }
+  // if (unsafe == true && ((millis() - lastsmsmillis) > alertDelay || lastsmsmillis == 0))
+  // {
+  //   getGPS();
+  //   Serial.println("~~~~~~~~~~~~~~~~~~~~~~End loop~~~~~~~~~~~~~~~~~~~~~~~~~~");
+  //   lastsmsmillis = millis();
+  // }
   updateSerial();
 }
 
@@ -77,8 +78,9 @@ true : triggered,
 false : not triggered*/
 void checktriggered()
 {
-  // TODO check for false triggers by leg
-  if (unsafeFlag && millis() - triggertime > 15000)
+  int triggerButtonState = digitalRead(TRIGGER_BUTTON);
+  int safeButtonState = digitalRead(SAFE_BUTTON);
+  if (unsafeFlag && millis() - triggertime > 15000 && !shoeWorn)
   {
     Serial.println("Emergency!!!");
     unsafe = true;
@@ -86,20 +88,30 @@ void checktriggered()
   }
   else
   {
-    int triggerButtonState = digitalRead(TRIGGER_BUTTON);
-    int safeButtonState = digitalRead(SAFE_BUTTON);
     if (triggerButtonState != lastTriggerButtonState || safeButtonState != lastSafeButtonState)
     {
-      if (triggerButtonState == HIGH && safeButtonState == LOW)
+      if (lastSafeButtonState == LOW && safeButtonState == HIGH && triggerButtonState == LOW && lastTriggerButtonState == LOW)
       {
-        Serial.println("TRIGGER Button CAUGHT");
-        triggertime = millis();
-        unsafeFlag = true;
+        // Serial.println("Safe removal1");
+        shoeWorn = false;
       }
-      else if (safeButtonState == HIGH)
+      else if (safeButtonState == LOW && lastSafeButtonState == HIGH && triggerButtonState == HIGH && lastTriggerButtonState == HIGH)
       {
-        Serial.println("Safe removal");
-        unsafeFlag = false;
+        // Serial.println("Safe removal2");
+        shoeWorn = false;
+      }
+      else if (triggerButtonState == HIGH && lastTriggerButtonState == LOW && safeButtonState == LOW && lastSafeButtonState == LOW && shoeWorn)
+      {
+        // Serial.println("Trigger caught");
+        shoeWorn = false;
+        unsafeFlag = true;
+        triggertime = millis();
+      }
+      else if (triggerButtonState == LOW && lastTriggerButtonState == HIGH && safeButtonState == LOW && lastSafeButtonState == LOW && !shoeWorn)
+      {
+        // Serial.println("Shoe is worn now");
+        shoeWorn = true;
+        unsafe = false;
       }
       lastTriggerButtonState = triggerButtonState;
       lastSafeButtonState = safeButtonState;
@@ -426,7 +438,6 @@ void firebaseSetup()
   }
 }
 
-// TODO fetch emergency contacts
 boolean fetchEmergencyContact()
 {
   if (Firebase.ready() && (millis() - sendDataPrevMillis > 15000 || sendDataPrevMillis == 0))

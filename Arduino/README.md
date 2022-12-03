@@ -212,7 +212,7 @@ The time is zero time zone time, at 2:50:55 on October 7, 2017.
 
 `AT+HTTPGET=<url>` Uniform resource identifier, which can be a domain name or IP address <br>
 `AT+HTTPPOST=<url>,<content_type>,<body_content> <content_type>` : network file type and web page encoding content type `<body_content>:` body text <br>
-Example 
+Example
 `AT+CGATT=1` Attach to the network, if you need to go online, this command is required
 
 ```
@@ -383,10 +383,9 @@ Some one time configs:<br>
 -   [x] Send SMS to multiple devices [git](https://github.com/ahmadlogs/nodemcu/blob/main/sim800l-gps-reg-phone/sim800l-gps-reg-phone.ino)
 -   [x] Receive call always
 -   [x] Send GPS to Firebase
--   [ ] SetUp - customize emergency contacts.
+-   [x] SetUp - customize emergency contacts.
 -   [ ] LED Indicator
 -   [x] Send SMS only if location changes
 -   [ ] if location not fetched, keep fetching
 -   [ ] Delete received SMS
 -   [x] Setup safe show removal
-
