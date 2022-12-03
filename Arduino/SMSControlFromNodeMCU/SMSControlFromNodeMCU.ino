@@ -25,7 +25,7 @@ boolean unsafeFlag = false;
 unsigned long triggertime;
 unsigned long dataMillis = 0;
 unsigned long lastsmsmillis = 0;
-int alertDelay = 60000; // 3600000 hourly
+int alertDelay = 3600000; // 3600000 hourly
 unsigned long sendDataPrevMillis = 0;
 
 // ------------------------------------------------------------
@@ -64,6 +64,7 @@ void loop()
   if (unsafe == true && ((millis() - lastsmsmillis) > alertDelay || lastsmsmillis == 0))
   {
     getGPS();
+    Serial.println("~~~~~~~~~~~~~~~~~~~~~~End loop~~~~~~~~~~~~~~~~~~~~~~~~~~");
     lastsmsmillis = millis();
   }
   updateSerial();
@@ -112,13 +113,13 @@ void getGPS()
   gpscall = true;
   noparseupdate();
   Serial2.println("AT+LOCATION=2\r");
-  Serial.println("Get gps called");
+  // Serial.println("Get gps called");
   wait(2000);
   while (Serial2.available())
   {
     replyfromA9G = Serial2.readString();
   }
-  Serial.println("\n\n------------------------------\n" + replyfromA9G + "\n------------------------------");
+  // Serial.println("\n\n------------------------------\n" + replyfromA9G + "\n------------------------------");
   int index = replyfromA9G.indexOf("\r");
   replyfromA9G.remove(0, index + 2);
   replyfromA9G.trim();
@@ -128,7 +129,6 @@ void getGPS()
   {
     Serial.println("GPS not fixed caught");
     noparseupdate();
-    // Serial.println(replyfromA9G);
   }
   else
   {
@@ -258,7 +258,6 @@ void updateSerial()
   {
     parseData(Serial2.readString());
   }
-  // wait(2000);
 }
 
 void wait(int millisec)
@@ -327,36 +326,9 @@ void parseData(String replyfromA9G)
 
   if (replyfromA9G == "OK")
   {
-    // Serial.println("OK was caught");
     Serial.println("ok caught " + replyfromA9G);
     return;
   }
-  // else if (gpscall)
-  // {
-  //   Serial.println("Checking if gps coordinates");
-  //   if (replyfromA9G.indexOf("GPS NOT FIX NOW") != -1)
-  //   {
-  //     Serial.println("GPS not fixed caught");
-  //     noparseupdate();
-  //     Serial.println(replyfromA9G);
-  //     //      gpscall = false;
-  //     //      return;
-  //   }
-  //   index = replyfromA9G.indexOf(",");
-  //   Serial.println("Found");
-  //   GPSFixed = true;
-  //   latitude = replyfromA9G.substring(0, index);
-  //   longitude = replyfromA9G.substring(index + 1, replyfromA9G.length());
-  //   // variable msg contains the message to be sent.
-  //   alertSMS(latitude, longitude);
-  //   temp = latitude + "," + longitude;
-  //   if (!temp.equals(replyfromA9G))
-  //   {
-  //     firebaseSend(getTime(), latitude, longitude);
-  //   }
-  //   Serial.println("Co-Ordinates didnot change!");
-  //   gpscall = false;
-  // }
   else if (replyfromA9G.indexOf("+CME ERROR:") != -1)
   {
     Serial.println("Error has occured");
@@ -445,13 +417,12 @@ void firebaseSetup()
   Firebase.begin(&config, &auth);
   Firebase.reconnectWiFi(true);
   config.timeout.serverResponse = 10 * 1000;
-  // Firebase.setDoubleDigits(5);
   while (true)
   {
     if (fetchEmergencyContact())
       break;
     else
-      Serial.println("~");
+      Serial.print("~");
   }
 }
 
@@ -461,21 +432,34 @@ boolean fetchEmergencyContact()
   if (Firebase.ready() && (millis() - sendDataPrevMillis > 15000 || sendDataPrevMillis == 0))
   {
     sendDataPrevMillis = millis();
-    Serial.printf("Get string... %s\n", Firebase.RTDB.getString(&fbdo, F("/test/string")) ? fbdo.to<const char *>() : fbdo.errorReason().c_str());
-
-    if (Firebase.RTDB.getString(&fbdo, F("/Users/7a5Jza5gO3bB4OBP0rAMRzfCXJB3/emergency_contact")))
+    if (Firebase.RTDB.getJSON(&fbdo, "/Users/peuuYsxEqMcnoGA5vG8mgIDVete2"))
     {
-      String fetchedcontacts = fbdo.to<const char *>();
-      if (senderNumber.indexOf(fetchedcontacts) == -1)
+      FirebaseJson json = fbdo.to<FirebaseJson>();
+      json.remove("emergency_contact_new");
+      json.remove("dob");
+      json.remove("blood_group");
+      json.remove("age");
+      json.remove("email");
+      json.remove("height");
+      json.remove("id");
+      json.remove("imageURL");
+      json.remove("phone_number");
+      json.remove("weight");
+      json.remove("name");
+      size_t count = json.iteratorBegin();
+      for (size_t i = 0; i < count; i++)
       {
-        senderNumber.concat("+91" + fetchedcontacts + ",");
-        Serial.println(senderNumber);
-        return true;
+        FirebaseJson::IteratorValue value = json.valueAt(i);
+        if (value.key.substring(0).compareTo("emergency_contact_new") == 0 && senderNumber.indexOf(value.value.substring(1, value.value.length() - 1)) == -1)
+        {
+          senderNumber.concat("+91" + value.value.substring(1, value.value.length() - 1) + ",");
+        }
+        else if (value.key.substring(0).compareTo("emergency_contact") == 0)
+          senderNumber.concat("+91" + value.value.substring(1, value.value.length() - 1) + ",");
       }
-      else
-      {
-        Serial.println("Contact already in list!");
-      }
+      json.iteratorEnd();
+      Serial.println(senderNumber);
+      return true;
     }
     else
       Serial.println(fbdo.errorReason().c_str());
