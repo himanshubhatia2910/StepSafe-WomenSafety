@@ -1,9 +1,5 @@
 package com.example.stepsafe_womensafety.ui.home;
 
-import static android.content.Context.SENSOR_SERVICE;
-
-import static androidx.core.content.ContextCompat.*;
-
 import android.Manifest;
 import android.app.Activity;
 import android.app.PendingIntent;
@@ -28,8 +24,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
-import com.bumptech.glide.Glide;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
@@ -37,10 +33,9 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.stepsafe_womensafety.MainActivity;
+import com.bumptech.glide.Glide;
 import com.example.stepsafe_womensafety.R;
 import com.example.stepsafe_womensafety.databinding.FragmentHomeBinding;
-import com.example.stepsafe_womensafety.ui.Users;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.LocationCallback;
@@ -50,7 +45,6 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;

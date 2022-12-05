@@ -13,8 +13,6 @@ public class Helpline extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_helpline);
         police = findViewById(R.id.police);
-        police.setOnClickListener(view ->{
-            Toast.makeText(Helpline.this, "User registered successfully", Toast.LENGTH_SHORT).show();
-        });
+        police.setOnClickListener(view -> Toast.makeText(Helpline.this, "User registered successfully", Toast.LENGTH_SHORT).show());
     }
 }

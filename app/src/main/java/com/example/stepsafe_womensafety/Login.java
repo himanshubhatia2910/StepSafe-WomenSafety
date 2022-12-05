@@ -65,30 +65,24 @@ public class Login extends AppCompatActivity {
             }
         });
 
-        SignUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), CreateAccount.class);
-                startActivity(intent);
+        SignUp.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), CreateAccount.class);
+            startActivity(intent);
 
-            }
         });
         mAuth = FirebaseAuth.getInstance();
-        forgot_password.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String email = etLoginEmail.getText().toString().trim();
-                if (TextUtils.isEmpty(email)) {
-                    Toast.makeText(getApplication(), "Enter your registered email id", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                mAuth.sendPasswordResetEmail(email)
-                        .addOnCompleteListener(task -> {
-                            if (task.isSuccessful()) {
-                                Toast.makeText(Login.this, "Password recovery mail sent on registered Email", Toast.LENGTH_SHORT).show();
-                            }
-                        });
+        forgot_password.setOnClickListener(v -> {
+            String email = etLoginEmail.getText().toString().trim();
+            if (TextUtils.isEmpty(email)) {
+                Toast.makeText(getApplication(), "Enter your registered email id", Toast.LENGTH_SHORT).show();
+                return;
             }
+            mAuth.sendPasswordResetEmail(email)
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(Login.this, "Password recovery mail sent on registered Email", Toast.LENGTH_SHORT).show();
+                        }
+                    });
         });
         btnLogin.setOnClickListener(view -> {
 //            func();
@@ -96,9 +90,7 @@ public class Login extends AppCompatActivity {
             loginUser();
 
         });
-        tvRegisterHere.setOnClickListener(view -> {
-            startActivity(new Intent(Login.this, CreateAccount.class));
-        });
+        tvRegisterHere.setOnClickListener(view -> startActivity(new Intent(Login.this, CreateAccount.class)));
 
 
     }
@@ -114,17 +106,14 @@ public class Login extends AppCompatActivity {
             etLoginPassword.setError("Password cannot be empty");
             etLoginPassword.requestFocus();
         } else {
-            mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    if (task.isSuccessful()) {
-                        Toast.makeText(Login.this, "User logged in successfully", Toast.LENGTH_SHORT).show();
-                        Intent i= new Intent(Login.this, Home.class);
-                        startActivity(i);
-                        finish();
-                    } else {
-                        Toast.makeText(Login.this, "Log in Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                    }
+            mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    Toast.makeText(Login.this, "User logged in successfully", Toast.LENGTH_SHORT).show();
+                    Intent i= new Intent(Login.this, Home.class);
+                    startActivity(i);
+                    finish();
+                } else {
+                    Toast.makeText(Login.this, "Log in Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
         }

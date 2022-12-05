@@ -1,27 +1,15 @@
 package com.example.stepsafe_womensafety;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
+import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
-import java.util.HashMap;
-
-
 public class CreateAccount extends AppCompatActivity {
 
     TextView etRegEmail;
@@ -31,7 +19,6 @@ public class CreateAccount extends AppCompatActivity {
     FirebaseAuth mAuth;
     ImageView ShowHidePass;
 
-    DatabaseReference reference;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -62,13 +49,9 @@ public class CreateAccount extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        btnRegister.setOnClickListener(view ->{
-            createUser();
-        });
+        btnRegister.setOnClickListener(view -> createUser());
 
-        tvLoginHere.setOnClickListener(view ->{
-            startActivity(new Intent(CreateAccount.this, Login.class));
-        });
+        tvLoginHere.setOnClickListener(view -> startActivity(new Intent(CreateAccount.this, Login.class)));
     }
 
     private void createUser(){
@@ -82,8 +65,7 @@ public class CreateAccount extends AppCompatActivity {
             etRegPassword.setError("Password cannot be empty");
             etRegPassword.requestFocus();
         }else{
-            mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-//                @Override
+            //                @Override
 //                public void onComplete(@NonNull Task<AuthResult> task) {
 //                    if (task.isSuccessful()) {
 //                        FirebaseUser firebaseUser = mAuth.getCurrentUser();
@@ -108,20 +90,18 @@ public class CreateAccount extends AppCompatActivity {
 //                            }
 //                        });
 //                    }
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                    if (task.isSuccessful()){
-                        Toast.makeText(CreateAccount.this, "User registered successfully", Toast.LENGTH_SHORT).show();
-                        Intent i= new Intent(CreateAccount.this, Information.class);
-                        i.putExtra("email",email);
-                        //i.putExtra("password",password)
-                       startActivity(i);
-                       finish();
-                    }else{
-                        Toast.makeText(CreateAccount.this, "Registration Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                }
-
-            });
+            mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(task -> {
+                                if (task.isSuccessful()){
+                                    Toast.makeText(CreateAccount.this, "User registered successfully", Toast.LENGTH_SHORT).show();
+                                    Intent i= new Intent(CreateAccount.this, Information.class);
+                                    i.putExtra("email",email);
+                                    //i.putExtra("password",password)
+                                   startActivity(i);
+                                   finish();
+                                }else{
+                                    Toast.makeText(CreateAccount.this, "Registration Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
         }
     }
 

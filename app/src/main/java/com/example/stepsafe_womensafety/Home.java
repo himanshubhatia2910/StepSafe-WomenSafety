@@ -1,6 +1,5 @@
 package com.example.stepsafe_womensafety;
 
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
