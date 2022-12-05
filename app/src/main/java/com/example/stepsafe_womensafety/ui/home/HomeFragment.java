@@ -126,6 +126,7 @@ public class HomeFragment extends Fragment {
                 if(toggleSwitch.isChecked()){
                     getCurrentLocation();
                     shareLocation.setEnabled(true);
+                    shakeAlert();
                 }else {
                     Toast.makeText(getContext(),"Turn on the toggle switch",Toast.LENGTH_SHORT).show();
                     coordinates.setText(" ");
