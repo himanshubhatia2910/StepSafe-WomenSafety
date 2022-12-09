@@ -163,20 +163,35 @@ public class HomeFragment extends Fragment {
 
                     if (floatSum > 30){
                         //textView.setText("Yes, Shaking");
-                        String phoneno = "7887575773";
+                        String phoneno = "7499599400";
                         String msg = "Test Shake Message";
                         flag=true;
                         //message not working but call working
                         try {
-                            SmsManager sms = SmsManager.getDefault();
-                            PendingIntent sentPI;
-                            String SENT = "SMS_SENT";
-                            sentPI = PendingIntent.getBroadcast(getContext(), 0,new Intent(SENT), 0);
-                            sms.sendTextMessage(phoneno, null, msg, sentPI, null);
+                            if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED) {
+                                fuser = FirebaseAuth.getInstance().getCurrentUser();
+                                reference = FirebaseDatabase.getInstance().getReference("Users").child(fuser.getUid());
+                                reference.addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        String SENT = (String) dataSnapshot.child("coordinates").getValue();
+                                        PendingIntent sentPI;
+                                        SmsManager sms = SmsManager.getDefault();
+                                        sentPI = PendingIntent.getBroadcast(getContext(), 0,new Intent(SENT), 0);
+                                        sms.sendTextMessage(phoneno, null, SENT, sentPI, null);
+                                        Toast.makeText(getContext(),"Message Sent",Toast.LENGTH_LONG).show();
+                                    }
 
-//                            SmsManager smsManager=SmsManager.getDefault();
-//                            smsManager.sendTextMessage(phoneno,null,msg,null,null);
-                            Toast.makeText(getContext(),"Message Sent",Toast.LENGTH_LONG).show();
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+                                    }
+                                });
+                           // String SENT = "https://www.google.com/maps/?q=" + latitude+ "," +longitude;
+                            }
+                            else {
+                                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.SEND_SMS},
+                                        PERMISSION_CODE);
+                            }
                         }catch (Exception e)
                         {
                             Toast.makeText(getContext(),e.getLocalizedMessage(),Toast.LENGTH_LONG).show();
