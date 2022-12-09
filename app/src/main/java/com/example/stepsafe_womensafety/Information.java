@@ -99,6 +99,7 @@ public class Information extends AppCompatActivity {
             hashMap.put("weight", user_weight);
             hashMap.put("height", user_height);
             hashMap.put("emergency_contact", emergency_contact);
+            hashMap.put("coordinates","default");
             reference.setValue(hashMap).addOnCompleteListener(task -> {
                 if (task.isSuccessful()){
                     Intent intent = new Intent(Information.this, Home.class);

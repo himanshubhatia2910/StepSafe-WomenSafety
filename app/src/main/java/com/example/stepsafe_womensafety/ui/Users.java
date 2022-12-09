@@ -1,13 +1,13 @@
 package com.example.stepsafe_womensafety.ui;
 
 public class Users {
-    String email,name,blood_group,dob,password,imageUrl;
+    String email,name,blood_group,dob,password,imageUrl,coordinates;
     int phone_number,age,height,weight,emergency_contact;
 
     public Users() {
     }
 
-    public Users(String email,String imageUrl ,String password, String name, String blood_group, String dob, int phone_number, int age, int height, int weight, int emergency_contact) {
+    public Users(String email,String coordinates,String imageUrl ,String password, String name, String blood_group, String dob, int phone_number, int age, int height, int weight, int emergency_contact) {
         this.email = email;
         this.password=password;
         this.name = name;
@@ -18,6 +18,7 @@ public class Users {
         this.height = height;
         this.weight = weight;
         this.imageUrl =imageUrl;
+        this.coordinates =coordinates;
         this.emergency_contact = emergency_contact;
     }
 
@@ -27,7 +28,7 @@ public class Users {
     public String getPassword() {
         return password;
     }
-
+    public String getCoordinates(){return coordinates;}
     public String getName() {
         return name;
     }

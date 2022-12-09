@@ -54,6 +54,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
+
 public class HomeFragment extends Fragment {
     ImageView photo;
     public static final String SENSOR_SERVICE = "sensor";
@@ -64,6 +66,7 @@ public class HomeFragment extends Fragment {
     boolean flag = false;
     Context cont = getContext();
     Switch toggleSwitch;
+    FirebaseAuth mAuth;
     static int PERMISSION_CODE= 100;
     DatabaseReference reference;
     FirebaseUser fuser;
@@ -248,7 +251,15 @@ public class HomeFragment extends Fragment {
                                         int index = locationResult.getLocations().size() - 1;
                                         double latitude = locationResult.getLocations().get(index).getLatitude();
                                         double longitude = locationResult.getLocations().get(index).getLongitude();
-
+                                        mAuth = FirebaseAuth.getInstance();
+                                        FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                                        assert firebaseUser != null;
+                                        String userid = firebaseUser.getUid();
+                                        reference = FirebaseDatabase.getInstance().getReference("Users").child(userid);
+                                        HashMap<String, Object> map = new HashMap<>();
+                                        String urinew = "https://www.google.com/maps/?q=" + latitude+ "," +longitude ;
+                                        map.put("coordinates", ""+urinew);
+                                        reference.updateChildren(map);
                                         coordinates.setText("Latitude: "+ latitude + "\n" + "Longitude: "+ longitude);
                                         shareLocation.setOnClickListener(view ->{
                                             String uri = "https://www.google.com/maps/?q=" + latitude+ "," +longitude ;
