@@ -72,7 +72,7 @@
             android:layout_height="50dp"
             android:layout_below="@id/contact"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:background="@drawable/login_button"
             android:text="Share Location" />
 
@@ -84,7 +84,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="5dp"
             android:text="Shake your device to send an emergency alert"
             android:gravity="center_horizontal"
             android:textColor="#6C63FF"

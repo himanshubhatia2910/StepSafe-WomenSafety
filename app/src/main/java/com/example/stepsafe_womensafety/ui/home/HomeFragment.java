@@ -163,7 +163,7 @@ public class HomeFragment extends Fragment {
 
                     if (floatSum > 30){
                         //textView.setText("Yes, Shaking");
-                        String phoneno = "7499599400";
+                        //String phoneno = "7499599400";
                         String msg = "Test Shake Message";
                         flag=true;
                         //message not working but call working
@@ -175,6 +175,7 @@ public class HomeFragment extends Fragment {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
                                         String SENT = (String) dataSnapshot.child("coordinates").getValue();
+                                        String phoneno = (String) dataSnapshot.child("emergency_contact").getValue();
                                         PendingIntent sentPI;
                                         SmsManager sms = SmsManager.getDefault();
                                         sentPI = PendingIntent.getBroadcast(getContext(), 0,new Intent(SENT), 0);
