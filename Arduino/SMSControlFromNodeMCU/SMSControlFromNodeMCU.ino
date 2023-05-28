@@ -17,7 +17,7 @@ bool gpscall = false;
 boolean unsafe = false;
 
 String msg, latitude = "0", longitude = "0", temp, lastcoordinates = "";
-String senderNumber = "+919372391056,";
+String senderNumber = "+91<default-SOS-phone-number>,";
 
 int lastTriggerButtonState = LOW;
 int lastSafeButtonState = LOW;
