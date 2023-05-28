@@ -17,8 +17,8 @@
 
 # Steps to communicate to AI-Thinker A9
 
-1. Make connections as per pic
-   <img src="https://github.com/himanshubhatia2910/StepSafe-WomenSafety/blob/master/Arduino/images/connections/connections.jpg" alt="connections" width="200"/>
+1. Make connections as per pic<br/>
+   <img src="https://github.com/himanshubhatia2910/StepSafe-WomenSafety/blob/master/Arduino/images/connections/connections.jpg" alt="connections" width="200"/><br>
    <img src="https://github.com/himanshubhatia2910/StepSafe-WomenSafety/blob/master/Arduino/images/connections/ESP32-Pinout.png" alt="esp32pindiagram"/><br/>
    TX = 17 (TX2)
    RX = 16 (RX2)
@@ -26,14 +26,14 @@
 3. Set communication as "Both NL & CR".
 
 # System Block Diagram
-<img src="https://github.com//SayuiYuto/StepSafe-WomenSafety/Arduino/images/system/StepSafeBlockdiagram.drawio.png" alt="Block Diagram" width="100"/><br/>
+<img src="https://github.com/SayuriYuto/StepSafe-WomenSafety/blob/master/Arduino/images/system/StepSafeBlockdiagram.drawio.png" alt="Block Diagram"><br/>
 <e>System Block Diagram</e><br/>
-<img src="https://github.com/SayuriYuto/StepSafe-WomenSafety/Arduino/images/system/prototype cirtuirty.png" alt="prototypecircuitry" width="100"/><br/>
+<img src="https://github.com/SayuriYuto/StepSafe-WomenSafety/blob/master/Arduino/images/system/prototype cirtuirty.png" alt="prototypecircuitry"/><br/>
 <e>Prototype circuitry</e><br/>
-<img src="https://github.com/SayuriYuto/StepSafe-WomenSafety/Arduino/images/system/internal circuitry of StepSafe.png" alt="internalcircuitry"/><br/>
+<img src="https://github.com/SayuriYuto/StepSafe-WomenSafety/blob/master/Arduino/images/system/internal%20circuitry%20of%20StepSafe.png" alt="internalcircuitry"/><br/>
 <e>Internal circuitry of Shoe</e>
 
-# Variable Reference for [file](https://github.com/SayuriYuto/StepSafe-WomenSafety/Arduino/SMSControlFromNodeMCU/SMSControlFromNodeMCU.ino)
+# Variable Reference for [file](https://github.com/SayuriYuto/StepSafe-WomenSafety/blob/master/Arduino/SMSControlFromNodeMCU/SMSControlFromNodeMCU.ino)
 | Parameter | Type     | Description                |
 | :-------- | :------- | :------------------------- |
 | `WIFI_SSID` | `string` | **Required**. Enter WiFi SSID in <secrets.h> |
