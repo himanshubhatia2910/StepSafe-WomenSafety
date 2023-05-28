@@ -23,8 +23,8 @@ IoT-based hardware embedded in a shoe which incorporates a triggering mechanism,
 - Safe removal switch to avoid false triggereing in case of shoe removal in safe environment.
 ## Screenshots
 
-[App Screenshot](https://github.com/SayuriYuto/StepSafe-WomenSafety/tree/master/appscreenshots) | 
-[Hardware Screenshot](https://github.com/SayuriYuto/StepSafe-WomenSafety/tree/master/images)
+![App Screenshot](https://github.com/SayuriYuto/StepSafe-WomenSafety/appscreenshots)
+![Hardware Screenshot](https://github.com/SayuriYuto/Arduino/images)
 
 ## Feedback
 
