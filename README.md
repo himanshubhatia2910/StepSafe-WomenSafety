@@ -8,6 +8,8 @@
 
 IoT-based hardware embedded in a shoe which incorporates a triggering mechanism, GPS module, and emergency calling feature to provide women with a means of quickly and effectively alerting authorities accompanying Android application and website, which further enhance its functionality.
 
+[IEEE Paper (in process)](https://drive.google.com/file/d/1NDG-447oIqYqpYwWg8_cs-nr2t9JofQd/view?usp=share_link)
+
 ## Documentation
 
 [Documentation for Hardware](https://github.com/SayuriYuto/StepSafe-WomenSafety/blob/master/Arduino/README.md)
